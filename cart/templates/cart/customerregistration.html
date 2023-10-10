@@ -14,7 +14,7 @@
     <div class="mb-3">
         
         <label class="form-label">{{ field.label }}</label> {{ field }}
-        {{ field.errors }}
+        <p class="error">{{ field.errors|striptags }}</p>
     </div>
     
     {% endfor %}
