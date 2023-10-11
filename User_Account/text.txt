@@ -1,0 +1,4 @@
+Django Rest Framework
+2 step verification 
+and otp verification through phone / email
+login using phone and otp
