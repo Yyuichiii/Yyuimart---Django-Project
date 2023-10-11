@@ -9,9 +9,9 @@ class User_Reg(UserCreationForm):
     
     class Meta:
         model=CustomUser
-        fields=['first_name','email','password1','password2','Phone']
-        labels={'email':'Email','first_name':'First Name',"Phone":"Phone Number"}
-        widgets = {'email': forms.EmailInput(attrs={'class': 'form-control','placeholder': 'Enter the Email'}),'first_name': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Name',}),'Phone': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Name',})}
+        fields=['name','email','Phone','password1','password2',]
+        labels={'email':'Email','name':'Name','Phone':'Phone Number'}
+        widgets = {'email': forms.EmailInput(attrs={'class': 'form-control','placeholder': 'Enter the Email'}),'name': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Name',}),'Phone': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Phone Number',})}
         
 
 

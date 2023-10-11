@@ -13,14 +13,16 @@ from .managers import CustomUserManager
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
-    first_name = models.CharField(_("first name"), max_length=150, blank=False)
+    name = models.CharField(_("name"), max_length=150, blank=False)
     phoneNumberRegex = val(regex = r"^\+?1?\d{8,15}$")
-    Phone = models.CharField(_("Phone"),validators = [phoneNumberRegex], max_length=15, blank=False)
+    Phone = models.CharField(_("Phone"),validators = [phoneNumberRegex], max_length=15, blank=False) 
     
-    
+        
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    
 
     objects = CustomUserManager()
 
