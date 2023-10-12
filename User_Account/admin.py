@@ -36,7 +36,7 @@ class CustomUserAdmin(UserAdmin):
 
 
     search_fields = ("email",'first_name')
-    ordering = ("email",)   
+    ordering = ('is_superuser',)   
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
