@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
+from .models import user_address
 from django.http import HttpResponse
-from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change
+from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form
 from .email import registration_email,password_email
 from django.contrib import messages
 from django.contrib.auth import login,logout,authenticate
@@ -59,7 +60,13 @@ def registration(request):
 def profile(request):
     if(not request.user.is_authenticated):
         return redirect('login')
-    fm=User_Change_Reg(initial={'name': request.user.name,'email':request.user.email,'Phone':request.user.Phone})
+    fm=User_Change_Reg(initial={'name': request.user.name,'Phone':request.user.Phone})
+    if request.method == 'POST':
+        fm = User_Change_Reg(request.POST,instance=request.user)
+        if fm.is_valid():
+             fm.save()
+             return redirect('home')
+
     return render(request,'User_Account/profile.html',{'form':fm})
 
 # User Password Change
@@ -82,3 +89,18 @@ def password_change(request):
 # User Cart
 def cart(request):   
     return render(request,'User_Account/addtocart.html')
+
+
+
+def address(request):
+    fm=address_form()
+    if request.method == 'POST':
+        fm = address_form(request.POST)
+        if fm.is_valid():
+            obj=fm.save(commit=False)
+            # print("obj",obj)
+            # print("obj.user",obj.user)
+            obj.user=request.user
+            obj.save()
+            return redirect('home')
+    return render(request,'User_Account/address.html',{'form':fm})

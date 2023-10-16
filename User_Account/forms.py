@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm,UserChangeForm,PasswordCh
 from django import forms 
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-from .models import CustomUser
+from .models import CustomUser,user_address
 from django.contrib.auth import authenticate
 from django.contrib.auth import password_validation
 
@@ -25,9 +25,9 @@ class User_Change_Reg(UserChangeForm):
     password=None
     class Meta:
         model=CustomUser
-        fields=['name','Phone','email']
-        labels={'email':'Email','name':'Name','Phone':'Phone Number'}
-        widgets = {'email': forms.EmailInput(attrs={'disabled':True,'class': 'form-control','placeholder': 'Enter the Email'}),'name': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Name',}),'Phone': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Phone Number',})}
+        fields=['name','Phone']
+        labels={'name':'Name','Phone':'Phone Number'}
+        widgets = {'name': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Name',}),'Phone': forms.TextInput(attrs={'class': 'form-control','placeholder': 'Enter the Phone Number',})}
        
 
 class login_form(forms.Form):
@@ -68,5 +68,11 @@ class custom_password_change(PasswordChangeForm):
     old_password = forms.CharField(label=_("Old password"),strip=False,widget=forms.PasswordInput(attrs={"autocomplete": "current-password", "autofocus": True,"class": "form-control"}))
 
 
+class address_form(forms.ModelForm):
+    
+    class Meta:
+        model = user_address
+        exclude = ('user',)
+        # fields=['Name' ,'user','Phone','Pincode','State','house_no','Road_name']
 
         
