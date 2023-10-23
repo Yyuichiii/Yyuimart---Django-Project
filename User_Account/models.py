@@ -38,8 +38,8 @@ class user_address(models.Model):
     Phone=models.CharField(max_length=15,blank=False)
     Pincode=models.CharField(max_length=6,blank=False)
     State=models.CharField(max_length=10,blank=False)
-    house_no=models.CharField(max_length=25,blank=False)
-    Road_name=models.CharField(max_length=30,blank=False)
+    house_no=models.CharField(max_length=50,blank=False)
+    Road_name=models.CharField(max_length=75,blank=False)
 
     def __str__(self):
         return f"{self.user}"

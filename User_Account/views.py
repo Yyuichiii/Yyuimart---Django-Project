@@ -20,7 +20,6 @@ def login_fun(request):
     if request.method=="POST":
         fm = login_form(request.POST)
         if fm.is_valid():
-            print("m yha aaya")
             uemail=fm.cleaned_data['email'] 
             upas=fm.cleaned_data['password']
             user = authenticate(email=uemail,password=upas)
@@ -91,16 +90,26 @@ def cart(request):
     return render(request,'User_Account/addtocart.html')
 
 
-
+# Address
 def address(request):
-    fm=address_form()
+    if(not request.user.is_authenticated):
+        return redirect('login')
+    obj=user_address.objects.get(user=request.user)
+    initial_dict = { 
+        'Name':obj.Name,
+        'Phone':obj.Phone,
+        'Pincode':obj.Pincode,
+        'State':obj.State,
+        'house_no':obj.house_no,
+        'Road_name':obj.Road_name,
+    } 
+    fm=address_form(initial=initial_dict)
     if request.method == 'POST':
         fm = address_form(request.POST)
         if fm.is_valid():
             obj=fm.save(commit=False)
-            # print("obj",obj)
-            # print("obj.user",obj.user)
             obj.user=request.user
             obj.save()
-            return redirect('home')
+            messages.success(request, "Address has been successfully changed !!!")
+            return redirect('profile')
     return render(request,'User_Account/address.html',{'form':fm})

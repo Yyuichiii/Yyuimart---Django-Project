@@ -73,6 +73,41 @@ class address_form(forms.ModelForm):
     class Meta:
         model = user_address
         exclude = ('user',)
+
+        STATE_CHOICES = (
+                ('', 'Select the State'),
+                ('Andhra Pradesh', 'Andhra Pradesh'),
+                ('Arunachal Pradesh', 'Arunachal Pradesh'),
+                ('Assam', 'Assam'),
+                ('Bihar', 'Bihar'),
+                ('Chhattisgarh', 'Chhattisgarh'),
+                ('Goa', 'Goa'),
+                ('Gujrat', 'Gujrat'),
+                ('Haryana', 'Haryana'),
+                ('Himachal Pradesh', 'Himachal Pradesh'),
+                ('Jharkhand', 'Jharkhand'),
+                ('Karnataka', 'Karnataka'),
+                ('Kerela', 'Kerela'),
+                ('Madhya Pradesh', 'Madhya Pradesh'),
+                ('Maharastra', 'Maharastra'),
+                ('Manipur', 'Manipur'),
+                ('Meghalaya', 'Meghalaya'),
+                ('Mizoram', 'Mizoram'),
+                ('Nagaland', 'Nagaland'),
+                ('Odisha', 'Odisha'),
+                ('Punjab', 'Punjab'),
+                ('Rajasthan', 'Rajasthan'),
+                ('Sikkim', 'Sikkim'),
+                ('Tamil Nadu', 'Tamil Nadu'),
+                ('Telengana', 'Telengana'),
+                ('Tripura', 'Tripura'),
+                ('Uttarakhand', 'Uttarakhand'),
+                ('Uttar Pradesh', 'Uttar Pradesh'),
+                ('West Bengal', 'West Bengal'),
+                )
+
+
         # fields=['Name' ,'user','Phone','Pincode','State','house_no','Road_name']
+        widgets = {'Name': forms.TextInput(attrs={'class': 'form-control',}),'Phone': forms.TextInput(attrs={'class': 'form-control',}),'Pincode': forms.TextInput(attrs={'class': 'form-control',}),'State': forms.Select(choices=STATE_CHOICES,attrs={'class': 'form-control'}),'house_no': forms.TextInput(attrs={'class': 'form-control',}),'Road_name': forms.TextInput(attrs={'class': 'form-control'}),}
 
         
