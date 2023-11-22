@@ -8,12 +8,14 @@ from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth import update_session_auth_hash
 
 # Home
-def home(request):  
+def home(request): 
+    admin_logout(request) 
     return render(request,'User_Account/home.html')
 
-
 # Login
-def login_fun(request):
+def login_fun(request):    
+    admin_logout(request)
+   
     if(request.user.is_authenticated):
         return redirect('home')
     fm=login_form()
@@ -25,6 +27,8 @@ def login_fun(request):
             user = authenticate(email=uemail,password=upas)
             if user is not None:
                 login(request,user)
+                addreess=user_address(user=request.user)
+                addreess.save()
                 messages.success(request, "Login Successfully !!!")
                 return redirect('home')
             
@@ -41,6 +45,7 @@ def logout_fun(request):
 
 # Registration
 def registration(request):
+    admin_logout(request)
     if(request.user.is_authenticated):
         return redirect('home')
     fm=User_Reg()
@@ -57,6 +62,7 @@ def registration(request):
 
 # User Profile
 def profile(request):
+    admin_logout(request)
     if(not request.user.is_authenticated):
         return redirect('login')
     fm=User_Change_Reg(initial={'name': request.user.name,'Phone':request.user.Phone})
@@ -69,8 +75,8 @@ def profile(request):
     return render(request,'User_Account/profile.html',{'form':fm})
 
 # User Password Change
-
 def password_change(request):
+    admin_logout(request)
     if(not request.user.is_authenticated):
         return redirect('login')
     fm=custom_password_change(request.user)
@@ -92,9 +98,12 @@ def cart(request):
 
 # Address
 def address(request):
+    admin_logout(request)
     if(not request.user.is_authenticated):
         return redirect('login')
+    
     obj=user_address.objects.get(user=request.user)
+
     initial_dict = { 
         'Name':obj.Name,
         'Phone':obj.Phone,
@@ -113,3 +122,10 @@ def address(request):
             messages.success(request, "Address has been successfully changed !!!")
             return redirect('profile')
     return render(request,'User_Account/address.html',{'form':fm})
+
+
+# Function to logout admin before visiting the webpages
+def admin_logout(request):
+    if(request.user.is_superuser):
+            logout(request)
+            messages.success(request, "Admin has been logout !!!")
