@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'cart',   
     "phonenumber_field",
-    'User_Account'
+    'User_Account',
+    'Product'
 ]
 
 MIDDLEWARE = [
@@ -133,3 +134,11 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'bussinessrtk@gmail.com'
 EMAIL_HOST_PASSWORD = 'gawo myxq wqlg rckz'
+
+
+
+
+# Base url to serve media files
+MEDIA_URL = ''
+# Path where media is stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Product/Product_Images')
