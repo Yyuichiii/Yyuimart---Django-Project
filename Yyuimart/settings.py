@@ -136,6 +136,7 @@ EMAIL_HOST_USER = 'bussinessrtk@gmail.com'
 EMAIL_HOST_PASSWORD = 'gawo myxq wqlg rckz'
 
 
+USE_THOUSAND_SEPARATOR = True
 
 
 # Base url to serve media files
