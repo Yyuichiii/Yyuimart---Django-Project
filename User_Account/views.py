@@ -6,11 +6,13 @@ from .email import registration_email,password_email
 from django.contrib import messages
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth import update_session_auth_hash
+from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe 
 
 # Home
 def home(request): 
     admin_logout(request) 
-    return render(request,'User_Account/home.html')
+    product=Women.objects.all()
+    return render(request,'User_Account/home.html',{'product':product})
 
 # Login
 def login_fun(request):    
