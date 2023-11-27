@@ -1,18 +1,24 @@
 {% extends 'User_Account/base.html' %}
 {% load static %}
+{% load mathfilters %}
 {% block title %}Product Detail{% endblock title %}
 {% block main-content %}
+<h1 id="message" class="success_1">The product has been added to the cart successfully !!! <span style="float:right">b<span> </h1>
+<h1 id="message1" class="fail">LOGIN Required  !!! <span style="float:right">b<span> </h1>
 <div class="container my-5">
  <div class="row">
   <div class="col-sm-6 text-center align-self-center">
-   <img src="{{Product.PImage.url}}" alt="Images here" class="img-fluid img-thumbnail">
+   <img src="{{Product.PImage.}}" alt="Images here" class="img-fluid img-thumbnail">
   </div>
   <div class="col-sm-5 offset-sm-1">
    <h2>{{Product.Brand}} {{Product.PName}}</h2>
    <hr>
    <p>{{Product.Description}}</p> <br>
-   <h4>Rs. {{Product.Price}} <small class="fw-light text-decoration-line-through">15999</small></h4> <br>
-   <a href="" class="btn btn-primary shadow px-5 py-2">Add to Cart</a>
+   <h4>Rs. {{Product.Price}} <small class="fw-light text-decoration-line-through">{{ Product.Price|addition:1200 }}
+</small></h4> <br>
+
+  <button id="cart" class="btn btn-primary shadow px-5 py-2" >Add to Cart</button>
+   
    <a href="" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a>
    <h5 class="mt-5">Available Offers</h5>
    <ul>
@@ -24,4 +30,66 @@
   </div>
  </div>
 </div>
-{% endblock main-content %}
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+ 
+
+
+   $('#cart').click(function(){
+      $.ajax({
+         type:'GET',
+         url: '/products/addcart',
+         data:{
+            id:"{{Product.PID}}",
+            
+         },
+         
+         success: function(response) {
+            
+            $('#message').css({"display": "block"});
+            $('#cart_no').html(response.cart_no);
+         },
+
+         error: function(response) {
+            
+            console.log("I failed");
+            $('#message1').css({"display": "block"});
+           
+           
+         }
+         
+         
+      });
+  
+    })
+    
+    
+   </script>
+   {% endblock main-content %}

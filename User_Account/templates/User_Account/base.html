@@ -1,5 +1,6 @@
 <!doctype html>
 {% load static %}
+{% load mathfilters %}
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -17,6 +18,8 @@
 
     <!--Custom CSS-->
     <link rel="stylesheet" href="{% static 'User_Account/css/style.css' %}">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
     <title>ShoppingX | {% block title %} {% endblock title %} </title>
@@ -76,7 +79,7 @@
               </ul>
             </li>
             <li class="nav-item mx-2">
-              <a href="{% url "cart" %}" class="nav-link text-white"><span class="badge bg-danger">4</span> Cart </a>
+              <a href="{% url "cart" %}" class="nav-link text-white"><span id="cart_no" class="badge bg-danger">{{cart_no}}</span> Cart </a>
             </li>
             {% endif %}
             {% if not request.user.is_authenticated %}
@@ -117,5 +120,6 @@
     <script src="{% static 'User_Account/js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'User_Account/js/all.min.js' %}"></script>
     <script src="{% static 'User_Account/js/myscript.js' %}"></script>
+
   </body>
 </html>

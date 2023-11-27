@@ -33,3 +33,18 @@
 }
 
 
+.success_1{
+    color:green;
+    font-size:20px;
+    text-align: center;
+    display: none;
+    width: 98%;
+}
+
+.fail{
+    color:red;
+    font-size:20px;
+    text-align: center;
+    display: none;
+    width: 98%;
+}

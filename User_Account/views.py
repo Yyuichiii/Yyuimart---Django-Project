@@ -1,12 +1,14 @@
 from django.shortcuts import render,redirect
-from .models import user_address
-from django.http import HttpResponse
+from .models import user_address,cart
+from django.urls import reverse
+from django.http import HttpResponse,HttpResponseRedirect
 from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form
 from .email import registration_email,password_email
 from django.contrib import messages
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth import update_session_auth_hash
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe 
+from itertools import chain
 
 # Home
 def home(request): 
@@ -94,8 +96,17 @@ def password_change(request):
     return render(request,'User_Account/changepassword.html',{'form':fm})
 
 # User Cart
-def cart(request):   
-    return render(request,'User_Account/addtocart.html')
+def cart_fun(request):   
+    
+    o=cart.objects.filter(user=request.user)
+    if not o.exists():
+        messages.success(request,"Cart is Empty Please add Something first ")
+        return redirect('home')
+    else:
+        
+        return render(request,"User_Account/addtocart.html",{'Products':o})
+
+
 
 
 # Address
@@ -131,3 +142,10 @@ def admin_logout(request):
     if(request.user.is_superuser):
             logout(request)
             messages.success(request, "Admin has been logout !!!")
+
+# Function to delete the cart item
+def delete(request,i):
+    obj=cart.objects.get(id=i)
+    obj.delete()
+    messages.success(request,"The selected Item has delete successfully")
+    return redirect('cart')

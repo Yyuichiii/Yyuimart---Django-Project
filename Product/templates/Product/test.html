@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xdzf</title>
+</head>
+<body>
+    this is for test dklsdks<br>
+    <a id="sa" href="">dsldzsd</a><br>
+    <button id="pa" >dfsd</button>
+</body>
+</html>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+    {% comment %} $("pa").click(function(){
+        $.ajax({console.log("Button clicked");
+   
+    })
+}); {% endcomment %}
+
+$('#sa').click(function(){
+    $.ajax({
+        success: function(response) {
+            console.log("fdgd");
+        }
+
+        
+        });
+
+  })
+
+// $("add_to_cart").click(function (){
+//    console.log("Button clicked");
+// });
+
+</script>

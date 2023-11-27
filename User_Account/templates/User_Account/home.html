@@ -51,7 +51,7 @@
  <div class="owl-carousel" id="slider1">
   
   {% for f in product  %}
-  <a href="{% url 'Product_Details' f.PID %}" class="btn"><div class="item"><img src="{{f.PImage.url}}" alt="" height="200px"><span class="fw-bold">{{f.Brand}}</span><br><span class="fs-5">Rs. {{f.Price}}</span></div></a>
+  <a href="{% url 'Product_Details' f.PID %}" class="btn"><div class="item"><img src="{{f.PImage.}}" alt="Images here" height="200px"><span class="fw-bold">{{f.Brand}}</span><br><span class="fs-5">Rs. {{f.Price}}</span></div></a>
   {% endfor %}
  </div>
 </div>

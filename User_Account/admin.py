@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import User_Reg,User_Change_Reg
-from .models import CustomUser,user_address
+from .models import CustomUser,user_address,cart
 
 
 
@@ -46,4 +46,12 @@ admin.site.register(CustomUser, CustomUserAdmin)
 @admin.register(user_address)
 class AuthorAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ("user","ID_Mobile","ID_Laptop","ID_Headphone","ID_Men","ID_Women","ID_Shoe","Quantity")
+    
+
+
 

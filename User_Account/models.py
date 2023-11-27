@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
+from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
+
 
 
 class val(RegexValidator):
@@ -43,3 +45,18 @@ class user_address(models.Model):
 
     def __str__(self):
         return f"{self.user}"
+    
+
+class cart(models.Model):
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    ID_Mobile=models.ForeignKey(Mobile,on_delete=models.CASCADE,blank=True,null=True)
+    ID_Laptop=models.ForeignKey(Laptop,on_delete=models.CASCADE,blank=True,null=True)
+    ID_Headphone=models.ForeignKey(HeadPhone,on_delete=models.CASCADE,blank=True,null=True)
+    ID_Men=models.ForeignKey(Men,on_delete=models.CASCADE,blank=True,null=True)
+    ID_Women=models.ForeignKey(Women,on_delete=models.CASCADE,blank=True,null=True)
+    ID_Shoe=models.ForeignKey(Shoe,on_delete=models.CASCADE,blank=True,null=True)
+    Quantity=models.PositiveIntegerField(default='0')
+
+
+
+   
