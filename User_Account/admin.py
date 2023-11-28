@@ -44,8 +44,9 @@ admin.site.register(CustomUser, CustomUserAdmin)
 
 
 @admin.register(user_address)
-class AuthorAdmin(admin.ModelAdmin):
-    pass
+class AddressAdmin(admin.ModelAdmin):
+    list_display=("user","Name","Phone")
+    search_fields = ("Name",'Phone')
 
 
 @admin.register(cart)

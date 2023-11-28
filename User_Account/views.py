@@ -31,8 +31,8 @@ def login_fun(request):
             user = authenticate(email=uemail,password=upas)
             if user is not None:
                 login(request,user)
-                addreess=user_address(user=request.user)
-                addreess.save()
+                # addreess=user_address(user=request.user)
+                # addreess.save()
                 messages.success(request, "Login Successfully !!!")
                 return redirect('home')
             
@@ -103,11 +103,35 @@ def cart_fun(request):
         messages.success(request,"Cart is Empty Please add Something first ")
         return redirect('home')
     else:
+        # Function defined below
+        tp=total_Price(o) 
+
+        return render(request,"User_Account/addtocart.html",{'Products':o,'Total_Price':tp})
+
+# Function for calculating the total price in the cart
+def total_Price(o):    
+    tp=0
+    for a in o:
         
-        return render(request,"User_Account/addtocart.html",{'Products':o})
+        if a.ID_Mobile:
+            tp=tp+a.Quantity*a.ID_Mobile.Price
+        
+        if a.ID_Laptop:
+            tp=tp+a.Quantity*a.ID_Laptop.Price
 
+        if a.ID_Headphone:
+            tp=tp+a.Quantity*a.ID_Headphone.Price
 
+        if a.ID_Men:
+            tp=tp+a.Quantity*a.ID_Men.Price
 
+        if a.ID_Women:
+            tp=tp+a.Quantity*a.ID_Women.Price
+
+        if a.ID_Shoe:
+            tp=tp+a.Quantity*a.ID_Shoe.Price
+
+    return tp
 
 # Address
 def address(request):
@@ -115,17 +139,21 @@ def address(request):
     if(not request.user.is_authenticated):
         return redirect('login')
     
-    obj=user_address.objects.get(user=request.user)
-
-    initial_dict = { 
-        'Name':obj.Name,
-        'Phone':obj.Phone,
-        'Pincode':obj.Pincode,
-        'State':obj.State,
-        'house_no':obj.house_no,
-        'Road_name':obj.Road_name,
-    } 
-    fm=address_form(initial=initial_dict)
+    objj=user_address.objects.filter(user=request.user)
+    if not objj.exists():
+        print("xskjd")
+        fm=address_form()
+    else:
+        for obj in objj:
+            initial_dict = { 
+                'Name':obj.Name,
+                'Phone':obj.Phone,
+                'Pincode':obj.Pincode,
+                'State':obj.State,
+                'house_no':obj.house_no,
+                'Road_name':obj.Road_name,
+            } 
+        fm=address_form(initial=initial_dict)
     if request.method == 'POST':
         fm = address_form(request.POST)
         if fm.is_valid():
@@ -133,7 +161,7 @@ def address(request):
             obj.user=request.user
             obj.save()
             messages.success(request, "Address has been successfully changed !!!")
-            return redirect('profile')
+            # return redirect('profile')
     return render(request,'User_Account/address.html',{'form':fm})
 
 
@@ -149,3 +177,36 @@ def delete(request,i):
     obj.delete()
     messages.success(request,"The selected Item has delete successfully")
     return redirect('cart')
+
+# Function to add the quantity of the product
+def add(request,i):
+    obj=cart.objects.get(id=i)
+    update=obj.Quantity+1
+    
+    obj.Quantity=update
+    obj.save()
+    
+    messages.success(request,"The Quantity of the selected Item has been added successfully")
+    return redirect('cart')
+
+# Function to reduce the quantity of the product
+def reducee(request,i):
+    
+    obj=cart.objects.get(id=i)
+    if obj.Quantity==1:
+        return redirect('delete',i)
+    update=obj.Quantity-1
+    obj.Quantity=update
+    obj.save()
+
+    messages.success(request,"The Quantity of the selected Item has been reduced successfully")
+    return redirect('cart')
+
+# Checkout
+def checkout(request):
+    obj=user_address.objects.filter(user=request.user)
+    m=""
+    if not obj.exists():
+        m="Address is Not Set"
+    
+    return render(request,"User_Account/checkout.html",{'Address':obj,'m':m})

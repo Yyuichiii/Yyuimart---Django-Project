@@ -18,24 +18,35 @@
   </div>
   <div class="col-sm-4 offset-sm-1">
     <h4>Select Shipping Address</h4>
+    
     <hr>
     <form action="">
       <div class="card">
         <div class="card-body">
-        <h5>Sonam Kumari</h5>
-        <p>Hirapur Dhanbad Jharkahnd</p>
+        {% for a in Address %}
+        <h5>{{a.Name}}</h5>
+        <h6>{{a.Phone}}</h6>
+        <h5>{{m}}</h5>
+        <p>{{a.house_no}} {{a.Road_name}} <br>{{a.State}} {{a.Pincode}}</p>
+        {% endfor %}
         </div>
       </div>
         <div class="form-check mt-2 mb-5">
-          <input class="form-check-input" type="radio" value="">
-          <label class="form-check-label fw-bold" for="">
-            Address: 1 </label>
+          <a href="{% url "address" %}" class="btn btn-primary mt-3 px-3 fw-bold" target="_blank" rel="noopener noreferrer">ADD / EDIT</a>
+            
         </div>
         <div class="text-end">
-          <button type="submit" class="btn btn-warning mt-3 px-5 fw-bold">Continue</button>
+          <h2>{Total Amount}</h2>
+          {% if Address %}
+          <button type="submit"  class="btn btn-warning mt-3 px-5 fw-bold">Continue</button>
+          {% else %}
+          <button type="submit"  class="btn btn-warning mt-3 px-5 fw-bold" disabled>Continue</button>
+          {% endif %}
+          
+          
         </div>
-      </form>
-    </div>
+        
+      </div>
   </div>
 </div>
 {% endblock main-content %}

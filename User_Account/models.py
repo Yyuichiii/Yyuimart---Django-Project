@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
@@ -36,12 +37,12 @@ class CustomUser(AbstractUser):
 
 class user_address(models.Model):
     user=models.OneToOneField(CustomUser,on_delete=models.CASCADE,primary_key=True)
-    Name=models.CharField(max_length=30,blank=False)
+    Name=models.CharField(max_length=30,blank=False,null=False)
     Phone=models.CharField(max_length=15,blank=False)
     Pincode=models.CharField(max_length=6,blank=False)
-    State=models.CharField(max_length=10,blank=False)
-    house_no=models.CharField(max_length=50,blank=False)
-    Road_name=models.CharField(max_length=75,blank=False)
+    State=models.CharField(max_length=20,blank=False)
+    house_no=models.CharField(max_length=50,blank=False,null=False)
+    Road_name=models.CharField(max_length=75,blank=False,null=False)
 
     def __str__(self):
         return f"{self.user}"

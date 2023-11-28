@@ -28,10 +28,23 @@
         <p class="alert alert-danger my-3">{{error}}</p>
         {% endfor %} {% endif %}
     <div class="col-12 mt-3">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button id="address_btn" type="submit" class="btn btn-primary">Submit</button>
     </div>
    </form>
     
+<script>
 
+const refreshBtn = document.getElementById("address_btn");
+
+function handleClick() {
+  var c='http://127.0.0.1:8000/cart/checkout/';
+  c.reload();
+  console.log(window.location);
+  
+}
+
+refreshBtn.addEventListener("click", handleClick);
+
+</script>
 
 {% endblock main-content %}

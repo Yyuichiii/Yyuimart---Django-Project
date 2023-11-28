@@ -10,5 +10,8 @@ urlpatterns = [
     path('password_change/', views.password_change,name='password_change'),
     path('cart/', views.cart_fun,name='cart'),
     path('c/<int:i>', views.delete,name='delete'),
+    path('d/<int:i>', views.add,name='add'),
+    path('e/<int:i>', views.reducee,name='reduce'),
+    path('cart/checkout/', views.checkout,name='checkout'),
     
 ]
