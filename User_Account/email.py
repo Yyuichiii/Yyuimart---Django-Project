@@ -17,3 +17,11 @@ def password_email(name,email):
     message = 'Hi '+name+' ,your password as been changed successfully.\n\nHope you have a good day ahead !!!\n\nRegards Team Yyuicart'
     recipient_list = [email]
     send_mail( subject, message, email_from, recipient_list )
+
+
+# Email for Recieved Order
+def order_recieved(email):
+    subject = 'Order Recieved !!!'
+    message = 'Your order has been successfully recieved.\n\nHope you have a good day ahead !!!\n\nRegards Team Yyuicart'
+    recipient_list = [email]
+    send_mail( subject, message, email_from, recipient_list )

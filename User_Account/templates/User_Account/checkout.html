@@ -1,5 +1,6 @@
 {% extends 'User_Account/base.html' %}
 {% load static %}
+{% load mathfilters %}
 {% block title %}Buy Now{% endblock title %}
 {% block main-content %}
 <div class="container">
@@ -9,9 +10,18 @@
     <hr>
       <div class="card mb-2">
         <div class="card-body">
-          <h5>Product: Product 1</h5>
-          <p>Quantity: 2</p>
-          <p class="fw-bold">Price: 100.00</p>
+          {% for p in product %}
+          <h5>{{p.ID_Mobile.Brand}} {{p.ID_Mobile.PName}}
+          {{p.ID_Headphone.Brand}} {{p.ID_Headphone.Brand}}
+          {{p.ID_Laptop.Brand}} {{p.ID_Laptop.PName}}
+          {{p.ID_Men.Brand}} {{p.ID_Men.PName}}
+          {{p.ID_Women.Brand}} {{p.ID_Women.PName}}
+          {{p.ID_Shoe.Brand}} {{p.ID_Shoe.PName}}</h5>
+          <p >Quantity : {{p.Quantity}}</p>
+          <p class="fw-bold">Price : Rs. {{p.ID_Mobile.Price |mul:p.Quantity }}{{p.ID_Laptop.Price |mul:p.Quantity }}{{p.ID_Headphone.Price |mul:p.Quantity }}{{p.ID_Men.Price |mul:p.Quantity }}{{p.ID_Women.Price |mul:p.Quantity }}{{p.ID_Shoe.Price |mul:p.Quantity }}/-</p>
+          {% endfor %}
+          
+          
         </div>
       </div>
     <small>Term and Condition: Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, ullam saepe! Iure optio repellat dolor velit, minus rem. Facilis cumque neque numquam laboriosam, accusantium adipisci nisi nihil in et quis?</small>
@@ -32,13 +42,13 @@
         </div>
       </div>
         <div class="form-check mt-2 mb-5">
-          <a href="{% url "address" %}" class="btn btn-primary mt-3 px-3 fw-bold" target="_blank" rel="noopener noreferrer">ADD / EDIT</a>
+          <a href="{% url "edit_address" %}" class="btn btn-primary mt-3 px-3 fw-bold"  rel="noopener noreferrer">ADD / EDIT</a>
             
         </div>
         <div class="text-end">
-          <h2>{Total Amount}</h2>
+          <h2>Rs. {{tp}}/-</h2>
           {% if Address %}
-          <button type="submit"  class="btn btn-warning mt-3 px-5 fw-bold">Continue</button>
+          <a href="{% url "success" %}" class="btn btn-warning mt-3 px-5 fw-bold">Continue</a>
           {% else %}
           <button type="submit"  class="btn btn-warning mt-3 px-5 fw-bold" disabled>Continue</button>
           {% endif %}
@@ -49,4 +59,5 @@
       </div>
   </div>
 </div>
+
 {% endblock main-content %}

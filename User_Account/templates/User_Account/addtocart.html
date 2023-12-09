@@ -27,8 +27,7 @@
       {% if p.ID_Shoe %}<img src="{{p.ID_Shoe.PImage.url}}" alt="Shoe Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">{% endif %}
 
 
-{% comment %} 
-      <img src={% if p.ID_Mobile %}"{{p.ID_Mobile.PImage.url}}"{% endif %} alt="Mobile Image" srcset="" class="img-fluid img-thumbnail shadow-sm" height="150" width="150"> {% endcomment %}
+
     </div>
      <div class="col-sm-9"> 
        <div>
@@ -86,7 +85,7 @@
          <span><strong>Rs. {{Total_Price |addition:100}}</strong></span>
        </li>
       </ul>
-      <div class="d-grid"><a href="" class="btn btn-primary">Place Order</a></div>
+      <div class="d-grid"><a href="{% url "" %}}}" class="btn btn-primary">Place Order</a></div>
     </div>
    </div>
   </div>
