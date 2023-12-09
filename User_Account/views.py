@@ -98,6 +98,7 @@ def password_change(request):
 
 # User Cart
 def cart_fun(request):   
+    print("dsf")
     
     o=cart.objects.filter(user=request.user)
     if not o.exists():
@@ -210,6 +211,9 @@ def reducee(request,i):
 
 # Checkout 
 def checkout(request):
+    referer = request.META.get('HTTP_REFERER')
+    if referer is None:
+        return redirect('home')
     o=cart.objects.filter(user=request.user)
     if not o.exists():
         return redirect('home')
@@ -235,7 +239,11 @@ class edit_address(address):
             return redirect('checkout')
 
 # Order Placed Showed but orders are not saving and cart is deleting 
+
 def success(request):
+    referer = request.META.get('HTTP_REFERER')
+    if referer is None:
+        return redirect('home')
     obj=cart.objects.filter(user=request.user)
     obj.delete()
     order_recieved(email=request.user)
