@@ -110,4 +110,6 @@ class address_form(forms.ModelForm):
         # fields=['Name' ,'user','Phone','Pincode','State','house_no','Road_name']
         widgets = {'Name': forms.TextInput(attrs={'class': 'form-control',}),'Phone': forms.TextInput(attrs={'class': 'form-control',}),'Pincode': forms.TextInput(attrs={'class': 'form-control',}),'State': forms.Select(choices=STATE_CHOICES,attrs={'class': 'form-control'}),'house_no': forms.TextInput(attrs={'class': 'form-control',}),'Road_name': forms.TextInput(attrs={'class': 'form-control'}),}
 
+
+
         

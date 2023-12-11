@@ -5,19 +5,43 @@ from django.http import HttpResponse,HttpResponseRedirect
 from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form
 from .email import registration_email,password_email,order_recieved
 from django.contrib import messages
-from django.contrib.auth import login,logout,authenticate
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import login,logout,authenticate,get_user_model,update_session_auth_hash
+
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe 
 from itertools import chain
 from django.core import serializers
 from django.views import View
 
 
+# Function to logout admin before visiting the webpages
+def admin_logout(request):
+    if(request.user.is_superuser):       #Condition to check if user is admin or not
+            logout(request)                #Logout function in django.contrib.auth
+            messages.success(request, "Admin has been logout !!!")
+
+
 # Home
 def home(request): 
-    admin_logout(request) 
-    product=Women.objects.all()
+    admin_logout(request)   #Function to logout the admin   
+    product=Women.objects.all()   #Women Product Queryset
     return render(request,'User_Account/home.html',{'product':product})
+
+# Registration
+def registration(request):
+    admin_logout(request)
+    if(request.user.is_authenticated):
+        return redirect('home')
+    fm=User_Reg()           #if request is get then empty form is initialized
+    if request.method=="POST":
+        fm = User_Reg(request.POST)     #if request is post
+        if fm.is_valid():               #Check for Validations
+            uemail=fm.cleaned_data['email']                                   
+            uname=fm.cleaned_data['name']                                   
+            fm.save()                   #fm is a model form so save() can be directly used
+            registration_email(uname,uemail)  #Function to send the e-mail after the registration                      
+            messages.success(request, "Account has been successfully created !!!")
+            return redirect('login')
+    return render(request,'User_Account/customerregistration.html',{'form':fm})
 
 # Login
 def login_fun(request):    
@@ -48,22 +72,7 @@ def logout_fun(request):
     return redirect('login')
 
 
-# Registration
-def registration(request):
-    admin_logout(request)
-    if(request.user.is_authenticated):
-        return redirect('home')
-    fm=User_Reg()
-    if request.method=="POST":
-        fm = User_Reg(request.POST)
-        if fm.is_valid():
-            uemail=fm.cleaned_data['email']                                   
-            uname=fm.cleaned_data['name']                                   
-            fm.save()
-            registration_email(uname,uemail)                        
-            messages.success(request, "Account has been successfully created !!!")
-            return redirect('login')
-    return render(request,'User_Account/customerregistration.html',{'form':fm})
+
 
 # User Profile
 def profile(request):
@@ -172,11 +181,6 @@ class address(View):
             messages.success(request, "Address has been successfully changed !!!")
             return redirect('profile')
         
-# Function to logout admin before visiting the webpages
-def admin_logout(request):
-    if(request.user.is_superuser):
-            logout(request)
-            messages.success(request, "Admin has been logout !!!")
 
 # Function to delete the cart item
 def delete(request,i):
@@ -249,3 +253,8 @@ def success(request):
     order_recieved(email=request.user)
     messages.success(request,"Order has been Successfully Recevied ")
     return redirect("home")
+
+
+
+def otp(request):
+    pass
