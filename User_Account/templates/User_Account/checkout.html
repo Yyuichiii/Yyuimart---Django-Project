@@ -11,14 +11,8 @@
       <div class="card mb-2">
         <div class="card-body">
           {% for p in product %}
-          <h5>{{p.ID_Mobile.Brand}} {{p.ID_Mobile.PName}}
-          {{p.ID_Headphone.Brand}} {{p.ID_Headphone.Brand}}
-          {{p.ID_Laptop.Brand}} {{p.ID_Laptop.PName}}
-          {{p.ID_Men.Brand}} {{p.ID_Men.PName}}
-          {{p.ID_Women.Brand}} {{p.ID_Women.PName}}
-          {{p.ID_Shoe.Brand}} {{p.ID_Shoe.PName}}</h5>
-          <p >Quantity : {{p.Quantity}}</p>
-          <p class="fw-bold">Price : Rs. {{p.ID_Mobile.Price |mul:p.Quantity }}{{p.ID_Laptop.Price |mul:p.Quantity }}{{p.ID_Headphone.Price |mul:p.Quantity }}{{p.ID_Men.Price |mul:p.Quantity }}{{p.ID_Women.Price |mul:p.Quantity }}{{p.ID_Shoe.Price |mul:p.Quantity }}/-</p>
+          <h5>{{p.Brand}} {{p.PName}}</p>
+          <p class="fw-bold">Price : Rs. {{p.Price}}/-</p>
           {% endfor %}
           
           

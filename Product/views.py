@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,HttpResponseForbidden
 from .models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
-from User_Account.models import cart
+from User_Account.models import User_cart
 from django.contrib import messages
 
 def product_details(request,pid): 
@@ -52,12 +52,7 @@ def category(request,c):
     return render(request,'Product/categories.html',{'P':all_products})
 
 
-# def add_cart(request,pid):
-    
-#     c=cart(user=request.user,PID=pid,quantity=1)
-#     c.save()
-#     product_details(request,pid)
-    
+# Method to add products in the cart
 
 def add_cart(request):
     if(not request.user.is_authenticated):
@@ -72,105 +67,90 @@ def add_cart(request):
         if Mobile.objects.filter(PID=a).exists():
             
             b=Mobile.objects.get(PID=a)
-            o=cart.objects.filter(user=request.user) & cart.objects.filter(ID_Mobile=b)
+            o=User_cart.objects.filter(user=request.user) & User_cart.objects.filter(PID=a)
             if not o.exists():
-                d=cart(user=request.user,ID_Mobile=b,Quantity=1)
+                d=User_cart(user=request.user,Quantity=1,Brand=b.Brand,PName=b.PName,Price=b.Price*1,PID=a,Category="Mobile",PImage=b.PImage)
                 d.save()
 
             else:                
                 q=o[0].Quantity+1
-                o.update(Quantity=q)
+                o.update(Quantity=q,Price=b.Price*q)
 
         # for adding Laptops in the cart
         if Laptop.objects.filter(PID=a).exists():
             
             b=Laptop.objects.get(PID=a)
-            o=cart.objects.filter(user=request.user) & cart.objects.filter(ID_Laptop=b)
+            o=User_cart.objects.filter(user=request.user) & User_cart.objects.filter(PID=a)
             if not o.exists():
-                d=cart(user=request.user,ID_Laptop=b,Quantity=1)
+                d=User_cart(user=request.user,Quantity=1,Brand=b.Brand,PName=b.PName,Price=b.Price*1,PID=a,Category="Laptop",PImage=b.PImage)
                 d.save()
 
             else:                
                 q=o[0].Quantity+1
-                o.update(Quantity=q)
+                o.update(Quantity=q,Price=b.Price*q)
 
 
         # for adding Headphones in the cart
         if HeadPhone.objects.filter(PID=a).exists():
             
             b=HeadPhone.objects.get(PID=a)
-            o=cart.objects.filter(user=request.user) & cart.objects.filter(ID_Headphone=b)
+            o=User_cart.objects.filter(user=request.user) & User_cart.objects.filter(PID=a)
             if not o.exists():
-                d=cart(user=request.user,ID_Headphone=b,Quantity=1)
+                d=User_cart(user=request.user,Quantity=1,Brand=b.Brand,PName=b.PName,Price=b.Price*1,PID=a,Category="HeadPhone",PImage=b.PImage)
                 d.save()
 
             else:                
                 q=o[0].Quantity+1
-                o.update(Quantity=q)
+                o.update(Quantity=q,Price=b.Price*q)
 
 
         # for adding Men in the cart
         if Men.objects.filter(PID=a).exists():
             
             b=Men.objects.get(PID=a)
-            o=cart.objects.filter(user=request.user) & cart.objects.filter(ID_Men=b)
+            o=User_cart.objects.filter(user=request.user) & User_cart.objects.filter(PID=a)
             if not o.exists():
-                d=cart(user=request.user,ID_Men=b,Quantity=1)
+                d=User_cart(user=request.user,Quantity=1,Brand=b.Brand,PName=b.PName,Price=b.Price*1,PID=a,Category="Men",PImage=b.PImage)
                 d.save()
 
             else:                
                 q=o[0].Quantity+1
-                o.update(Quantity=q)
+                o.update(Quantity=q,Price=b.Price*q)
 
 
         # for adding Women in the cart
         if Women.objects.filter(PID=a).exists():
             
             b=Women.objects.get(PID=a)
-            o=cart.objects.filter(user=request.user) & cart.objects.filter(ID_Women=b)
+            o=User_cart.objects.filter(user=request.user) & User_cart.objects.filter(PID=a)
             if not o.exists():
-                d=cart(user=request.user,ID_Women=b,Quantity=1)
+                d=User_cart(user=request.user,Quantity=1,Brand=b.Brand,PName=b.PName,Price=b.Price*1,PID=a,Category="Women",PImage=b.PImage)
                 d.save()
 
             else:                
                 q=o[0].Quantity+1
-                o.update(Quantity=q)
+                o.update(Quantity=q,Price=b.Price*q)
 
 
         # for adding Shoe in the cart
         if Shoe.objects.filter(PID=a).exists():
             
             b=Shoe.objects.get(PID=a)
-            o=cart.objects.filter(user=request.user) & cart.objects.filter(ID_Shoe=b)
+            o=User_cart.objects.filter(user=request.user) & User_cart.objects.filter(PID=a)
             if not o.exists():
-                d=cart(user=request.user,ID_Shoe=b,Quantity=1)
+                d=User_cart(user=request.user,Quantity=1,Brand=b.Brand,PName=b.PName,Price=b.Price*1,PID=a,Category="Shoe",PImage=b.PImage)
                 d.save()
 
             else:                
                 q=o[0].Quantity+1
-                o.update(Quantity=q)
+                o.update(Quantity=q,Price=b.Price*q)
  
         
         c1=0;
         if(request.user.is_authenticated):       
-            obj=cart.objects.filter(user=request.user)
+            obj=User_cart.objects.filter(user=request.user)
             for o in obj:
                 c1=c1+o.Quantity   
-        o=Mobile.objects.filter(PID=a)
-        print(o) 
-
-
+        
  
     return JsonResponse({'cart_no':c1})
-
-
-def temp(request):
-    if(not request.user.is_authenticated):
-        return HttpResponse(status=403)
-        if request.method=="GET":
-            a=request.GET["id"]
-            o=cart.objects.filter(user=request.user)
-            if not o.exists():
-                c=cart(user=request.user,ID_Mobile=a,Quantity=1)
-                c.save()
-

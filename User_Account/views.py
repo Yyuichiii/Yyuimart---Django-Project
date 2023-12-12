@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import user_address,cart,CustomUser
+from .models import user_address,CustomUser,User_cart,Order
 from django.urls import reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form,otp_form
@@ -11,6 +11,7 @@ from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
 from itertools import chain
 from django.core import serializers
 from django.views import View
+from datetime import datetime
 
 
 # function to generate OTP
@@ -156,17 +157,22 @@ def password_change(request):
 
 # User Cart
 def cart_fun(request):   
-    print("dsf")
     
-    o=cart.objects.filter(user=request.user)
+    o=User_cart.objects.filter(user=request.user)
     if not o.exists():
         messages.success(request,"Cart is Empty Please add Something first ")
         return redirect('home')
     else:
         # Function defined below
-        tp=total_Price(o) 
+        # tp=total_Price(o) 
 
-        return render(request,"User_Account/addtocart.html",{'Products':o,'Total_Price':tp})
+        tp=0
+        for a in o:
+            tp=tp+a.Price
+
+        tp=tp+100       #Added Shipping Charges
+
+        return render(request,"User_Account/cart.html",{'Products':o,'Total_Price':tp})
 
 # Function for calculating the total price in the cart
 def total_Price(o):    
@@ -231,17 +237,20 @@ class address(View):
 
 # Function to delete the cart item
 def delete(request,i):
-    obj=cart.objects.get(id=i)
+    obj=User_cart.objects.get(id=i)
     obj.delete()
     messages.success(request,"The selected Item has delete successfully")
     return redirect('cart')
 
 # Function to add the quantity of the product
 def add(request,i):
-    obj=cart.objects.get(id=i)
+    obj=User_cart.objects.get(id=i)
     update=obj.Quantity+1
+
+    price=obj.Price/obj.Quantity
     
     obj.Quantity=update
+    obj.Price=price*update
     obj.save()
     
     messages.success(request,"The Quantity of the selected Item has been added successfully")
@@ -250,11 +259,15 @@ def add(request,i):
 # Function to reduce the quantity of the product
 def reducee(request,i):
     
-    obj=cart.objects.get(id=i)
+    obj=User_cart.objects.get(id=i)
     if obj.Quantity==1:
         return redirect('delete',i)
     update=obj.Quantity-1
+
+    price=obj.Price/obj.Quantity
+
     obj.Quantity=update
+    obj.Price=price*update
     obj.save()
 
     messages.success(request,"The Quantity of the selected Item has been reduced successfully")
@@ -265,7 +278,7 @@ def checkout(request):
     referer = request.META.get('HTTP_REFERER')
     if referer is None:
         return redirect('home')
-    o=cart.objects.filter(user=request.user)
+    o=User_cart.objects.filter(user=request.user)
     if not o.exists():
         return redirect('home')
     obj=user_address.objects.filter(user=request.user)
@@ -273,8 +286,11 @@ def checkout(request):
     if not obj.exists():
         m="Address is Not Set"
 
-    
-    tp=total_Price(o)+100
+    tp=0
+    for a in o:
+        tp=tp+a.Price
+
+    tp=tp+100       #Added Shipping Charges
     return render(request,"User_Account/checkout.html",{'Address':obj,'m':m,'tp':tp,"product":o})
 
 
@@ -294,8 +310,15 @@ def success(request):
     referer = request.META.get('HTTP_REFERER')
     if referer is None:
         return redirect('home')
-    obj=cart.objects.filter(user=request.user)
+    
+    tp=0
+    obj=User_cart.objects.filter(user=request.user)
+    for o in obj:
+        tp=tp+o.Price
+        Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,Order_time=datetime.now(),PImage=o.PImage)
+        
+    # order_recieved(str(tp),request.user)
+    order_recieved(obj,request.user,tp+100)
     obj.delete()
-    order_recieved(email=request.user)
     messages.success(request,"Order has been Successfully Recevied ")
     return redirect("home")

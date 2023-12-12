@@ -46,15 +46,30 @@ class user_address(models.Model):
         return f"{self.user}"
     
 
-class cart(models.Model):
+
+class User_cart(models.Model):
     user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    ID_Mobile=models.ForeignKey(Mobile,on_delete=models.CASCADE,blank=True,null=True)
-    ID_Laptop=models.ForeignKey(Laptop,on_delete=models.CASCADE,blank=True,null=True)
-    ID_Headphone=models.ForeignKey(HeadPhone,on_delete=models.CASCADE,blank=True,null=True)
-    ID_Men=models.ForeignKey(Men,on_delete=models.CASCADE,blank=True,null=True)
-    ID_Women=models.ForeignKey(Women,on_delete=models.CASCADE,blank=True,null=True)
-    ID_Shoe=models.ForeignKey(Shoe,on_delete=models.CASCADE,blank=True,null=True)
-    Quantity=models.PositiveIntegerField(default='0')
+    PID=models.CharField(max_length=5,null=True)
+    Category=models.CharField(max_length=15,null=True)
+    Brand=models.CharField(max_length=15,null=True)
+    PName=models.CharField(max_length=20,null=True,verbose_name='Product Name')
+    Price=models.PositiveBigIntegerField(null=True)
+    Quantity=models.IntegerField(null=True)
+    PImage=models.ImageField(null=True,verbose_name='Product Image')
+
+
+
+class Order(models.Model):
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    Order_time=models.DateTimeField()
+    PID=models.CharField(max_length=5,null=True)
+    Category=models.CharField(max_length=15,null=True)
+    Brand=models.CharField(max_length=15,null=True)
+    PName=models.CharField(max_length=20,null=True,verbose_name='Product Name')
+    Price=models.PositiveBigIntegerField(null=True)
+    Quantity=models.IntegerField(null=True)
+    PImage=models.ImageField(null=True,verbose_name='Product Image')
+
 
 
 

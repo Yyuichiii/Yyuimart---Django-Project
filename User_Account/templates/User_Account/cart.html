@@ -14,17 +14,9 @@
     <div class="row my-5">
      <div class="col-sm-3 text-center align-self-center"> 
 
-      {% if p.ID_Mobile %}<img src="{{p.ID_Mobile.PImage.url}}" alt="Mobile Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">{% endif %}
+      <img src="{{p.PImage.}}" alt="Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">
 
-      {% if p.ID_Laptop %}<img src="{{p.ID_Laptop.PImage.url}}" alt="Laptop Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">{% endif %}
-
-      {% if p.ID_Headphone %}<img src="{{p.ID_Headphone.PImage.url}}" alt="Headphone Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">{% endif %}
-
-      {% if p.ID_Men %}<img src="{{p.ID_Men.PImage.url}}" alt="Men Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">{% endif %}
-
-      {% if p.ID_Women %}<img src="{{p.ID_Women.PImage.url}}" alt="Women Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">{% endif %}
-
-      {% if p.ID_Shoe %}<img src="{{p.ID_Shoe.PImage.url}}" alt="Shoe Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">{% endif %}
+     
 
 
 
@@ -32,12 +24,9 @@
      <div class="col-sm-9"> 
        <div>
        
-        {% if p.ID_Mobile %}<h5>{{p.ID_Mobile}}</h5>{% endif %}
-        {% if p.ID_Laptop %}<h5>{{p.ID_Laptop}}</h5>{% endif %}
-        {% if p.ID_Headphone %}<h5>{{p.ID_Headphone}}</h5>{% endif %}
-        {% if p.ID_Men %}<h5>{{p.ID_Men}}</h5>{% endif %}
-        {% if p.ID_Women %}<h5>{{p.ID_Women}}</h5>{% endif %}
-        {% if p.ID_Shoe %}<h5>{{p.ID_Shoe}}</h5>{% endif %}
+       <h5>{{p.Brand}} {{p.PName}}</h5>
+        
+    
         
        
        <div class="my-3">
@@ -52,12 +41,8 @@
         <a href={% url "delete" p.id %} class="btn btn-sm btn-secondary mr-3">Remove item </a>         
         <p class="mb-0"><span>
 
-          {% if p.ID_Mobile %}<strong>Rs. {{p.ID_Mobile.Price |mul:p.Quantity }}</strong>{% endif %}
-          {% if p.ID_Laptop %}<strong>Rs. {{p.ID_Laptop.Price |mul:p.Quantity }}</strong>{% endif %}
-          {% if p.ID_Headphone %}<strong>Rs. {{p.ID_Headphone.Price |mul:p.Quantity }}</strong>{% endif %}
-          {% if p.ID_Men %}<strong>Rs. {{p.ID_Men.Price |mul:p.Quantity }}</strong>{% endif %}
-          {% if p.ID_Women %}<strong>Rs. {{p.ID_Women.Price |mul:p.Quantity }}</strong>{% endif %}
-          {% if p.ID_Shoe %}<strong>Rs. {{p.ID_Shoe.Price |mul:p.Quantity }}</strong>{% endif %}
+          
+ <strong>Rs. {{p.Price}}</strong>
         </span></p>
       </div>
     </div>
@@ -82,7 +67,7 @@
         <div>
            <strong>Total</strong> <small>(including VAT)</small>
          </div>
-         <span><strong>Rs. {{Total_Price |addition:100}}</strong></span>
+         <span><strong>Rs. {{Total_Price}}</strong></span>
        </li>
       </ul>
       <div class="d-grid"><a href="{% url "checkout" %}" class="btn btn-primary">Place Order</a></div>
