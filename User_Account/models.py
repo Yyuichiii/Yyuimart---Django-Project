@@ -3,14 +3,15 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
+from .managers import CustomUserManager
 
 
 class val(RegexValidator):
     message = _("Enter a valid Phone number.")
 
 
-from .managers import CustomUserManager
 
+# This is a custom user model inhertited from AbstractUser
 
 class CustomUser(AbstractUser):
     username = None

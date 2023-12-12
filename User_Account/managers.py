@@ -2,20 +2,20 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
-
+# If someone wants to write every method of its own , they can inherit BaseUserManager from django.contrib.auth.base_user otherwise AbstractBaseUser
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
     """
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, email, password, name , phone):
         """
-        Create and save a user with the given email and password.
+        Create and save a user with the given email password name and phone.
         """
         if not email:
             raise ValueError(_("The Email must be set"))
         email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
+        user = self.model(email=email, name=name,Phone=phone)
         
         user.set_password(password)
         user.save()

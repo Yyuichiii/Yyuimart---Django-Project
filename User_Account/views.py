@@ -1,17 +1,32 @@
 from django.shortcuts import render,redirect
-from .models import user_address,cart
+from .models import user_address,cart,CustomUser
 from django.urls import reverse
 from django.http import HttpResponse,HttpResponseRedirect
-from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form
-from .email import registration_email,password_email,order_recieved
+from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form,otp_form
+from .email import registration_email,password_email,order_recieved,email_otp
 from django.contrib import messages
 from django.contrib.auth import login,logout,authenticate,get_user_model,update_session_auth_hash
-
+import math, random
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe 
 from itertools import chain
 from django.core import serializers
 from django.views import View
 
+
+# function to generate OTP
+def generateOTP() :
+ 
+    # Declare a digits variable  
+    # which stores all digits 
+    digits = "0123456789"
+    OTP = ""
+ 
+   # length of password can be changed
+   # by changing value in range
+    for i in range(6) :
+        OTP += digits[math.floor(random.random() * 10)]
+ 
+    return OTP
 
 # Function to logout admin before visiting the webpages
 def admin_logout(request):
@@ -19,11 +34,10 @@ def admin_logout(request):
             logout(request)                #Logout function in django.contrib.auth
             messages.success(request, "Admin has been logout !!!")
 
-
 # Home
 def home(request): 
     admin_logout(request)   #Function to logout the admin   
-    product=Women.objects.all()   #Women Product Queryset
+    product=Women.objects.all()   #Women Product Queryset   
     return render(request,'User_Account/home.html',{'product':product})
 
 # Registration
@@ -31,17 +45,51 @@ def registration(request):
     admin_logout(request)
     if(request.user.is_authenticated):
         return redirect('home')
+    request.session.flush()
     fm=User_Reg()           #if request is get then empty form is initialized
     if request.method=="POST":
         fm = User_Reg(request.POST)     #if request is post
-        if fm.is_valid():               #Check for Validations
-            uemail=fm.cleaned_data['email']                                   
-            uname=fm.cleaned_data['name']                                   
-            fm.save()                   #fm is a model form so save() can be directly used
-            registration_email(uname,uemail)  #Function to send the e-mail after the registration                      
-            messages.success(request, "Account has been successfully created !!!")
-            return redirect('login')
+        if fm.is_valid():               #Check for Validations  
+            # fm data is stored in session so otp verification can be done
+            # fm.save() will save the form data and will create the user because fm is a user modelform 
+            request.session['ue']=fm.cleaned_data['email']
+            request.session['up']=fm.cleaned_data['password1']  
+            request.session['uph']=uphone=fm.cleaned_data['Phone']
+            request.session['un']=uname=fm.cleaned_data['name']  
+            return redirect('/otp/')
+
     return render(request,'User_Account/customerregistration.html',{'form':fm})
+
+# Function for OTP VERIFICATION
+def otpfun(request):
+    referer = request.META.get('HTTP_REFERER')      #this will avoid if user access this through URL
+    if referer is None:
+        return redirect('home')
+    
+
+    if request.method=='GET':
+        fm=otp_form()
+        otp_generated=str(generateOTP())
+        request.session['otp_generated']=otp_generated     #otp is stored in session
+        email_otp(otp_generated,request.session['ue'])
+
+    if request.method=='POST':
+        fm=otp_form(request.POST)
+        if fm.is_valid():
+            otp_user=fm.cleaned_data['otp_digit']
+            if request.session['otp_generated']==str(otp_user):
+                CustomUser.objects.create_user(request.session['ue'],request.session['up'],request.session['un'],request.session['uph'])    
+                registration_email(request.session['un'],request.session['ue'])
+                request.session.flush()
+                messages.success(request, "Account has been successfully created !!!")
+                return redirect('login')
+            
+            else:
+                messages.error(request, "OTP is Incorrect !!!")
+                fm=otp_form()
+                return render(request,'User_Account/otp.html',{'form':fm})
+
+    return render(request,'User_Account/otp.html',{'form':fm})
 
 # Login
 def login_fun(request):    
@@ -49,8 +97,12 @@ def login_fun(request):
    
     if(request.user.is_authenticated):
         return redirect('home')
+    request.session.flush()
     fm=login_form()
+    
+
     if request.method=="POST":
+        
         fm = login_form(request.POST)
         if fm.is_valid():
             uemail=fm.cleaned_data['email'] 
@@ -70,9 +122,6 @@ def logout_fun(request):
     logout(request)
     messages.success(request, "Logout Successfully !!!")
     return redirect('login')
-
-
-
 
 # User Profile
 def profile(request):
@@ -144,10 +193,8 @@ def total_Price(o):
 
     return tp
 
-
 # Class based Address
-class address(View):
-    
+class address(View):  
     def get(self,request):
         admin_logout(request)
         if(not request.user.is_authenticated):
@@ -243,7 +290,6 @@ class edit_address(address):
             return redirect('checkout')
 
 # Order Placed Showed but orders are not saving and cart is deleting 
-
 def success(request):
     referer = request.META.get('HTTP_REFERER')
     if referer is None:
@@ -253,8 +299,3 @@ def success(request):
     order_recieved(email=request.user)
     messages.success(request,"Order has been Successfully Recevied ")
     return redirect("home")
-
-
-
-def otp(request):
-    pass

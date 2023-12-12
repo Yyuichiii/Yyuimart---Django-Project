@@ -112,4 +112,5 @@ class address_form(forms.ModelForm):
 
 
 
-        
+class otp_form(forms.Form):
+    otp_digit=forms.CharField(label='OTP',max_length=6,widget=forms.TextInput(attrs={'class': 'form-control',}))

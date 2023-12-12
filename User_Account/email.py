@@ -25,3 +25,12 @@ def order_recieved(email):
     message = 'Your order has been successfully recieved.\n\nHope you have a good day ahead !!!\n\nRegards Team Yyuicart'
     recipient_list = [email]
     send_mail( subject, message, email_from, recipient_list )
+
+
+
+# Email for OTP CONFIRMATION
+def email_otp(generated_otp,email):
+    subject = 'OTP !!!'
+    message = 'The OTP for the registration of your Account is:.\n\n'+generated_otp+ '\n\nRegards Team Yyuicart'
+    recipient_list = [email]
+    send_mail( subject, message, email_from, recipient_list )

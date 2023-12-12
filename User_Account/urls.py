@@ -15,6 +15,7 @@ urlpatterns = [
     path('cart/checkout/', views.checkout,name='checkout'),
     path('cart/checkout/edit_address', views.edit_address.as_view(),name='edit_address'),
     path('cart/checkout/success', views.success,name='success'),
+    path('otp/', views.otpfun,name='otp'),
    
     
 ]
