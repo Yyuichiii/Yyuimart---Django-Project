@@ -19,12 +19,10 @@ def password_email(name,email):
     send_mail( subject, message, email_from, recipient_list )
 
 
-# Email for Recieved Order
+# Email for Recieved Orders
 def order_recieved(Queryset,email,tp):
     subject = 'Order Recieved !!!'
     intro="Thank You for shopping at Yyuimart.\n\nWe have recieved an order of:\n"
-    # message = 'Your order of Rs.' +str(tp)+'/- has been successfully recieved.\n\nHope you have a good day ahead !!!\n\nRegards Team Yyuicart'
-    # m[]=[""]
     dic=""
     i=0
     for a in Queryset:
@@ -33,10 +31,9 @@ def order_recieved(Queryset,email,tp):
         dic=dic+m
         
     message=intro+dic+"The total Price is Rs. "+str(tp)+"/-"+"\n\nRegards Team Yyuimart "
-    # message="dff"
+    
     recipient_list = [email]
     send_mail( subject, message, email_from, recipient_list )
-
 
 
 # Email for OTP CONFIRMATION

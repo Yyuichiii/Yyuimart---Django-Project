@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class all_Products(models.Model):  # COMM0N TO ALL PRODUCTS
+class all_Products(models.Model):       # COMM0N TO ALL PRODUCTS
     Brand=models.CharField(max_length=15,null=True)
     PName=models.CharField(max_length=20,null=True,verbose_name='Product Name')
     Description=models.TextField(null=True)

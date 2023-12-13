@@ -1,6 +1,8 @@
 {% extends 'User_Account/base.html' %}
 {% load static %}
 {% load mathfilters %}
+{% load customfilters %}
+
 
 {% block title %}Cart{% endblock title %}
 {% block main-content %}
@@ -14,7 +16,7 @@
     <div class="row my-5">
      <div class="col-sm-3 text-center align-self-center"> 
 
-      <img src="{{p.PImage.}}" alt="Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">
+      <img src="{{p.PImage.url}}" alt="Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">
 
      
 
@@ -42,7 +44,7 @@
         <p class="mb-0"><span>
 
           
- <strong>Rs. {{p.Price}}</strong>
+ <strong>Rs. {{p.Price|num_format}}</strong>
         </span></p>
       </div>
     </div>
@@ -67,7 +69,7 @@
         <div>
            <strong>Total</strong> <small>(including VAT)</small>
          </div>
-         <span><strong>Rs. {{Total_Price}}</strong></span>
+         <span><strong>Rs. {{Total_Price|add:100}}</strong></span>
        </li>
       </ul>
       <div class="d-grid"><a href="{% url "checkout" %}" class="btn btn-primary">Place Order</a></div>

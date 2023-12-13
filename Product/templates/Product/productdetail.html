@@ -3,8 +3,8 @@
 {% load mathfilters %}
 {% block title %}Product Detail{% endblock title %}
 {% block main-content %}
-<h1 id="message" class="success_1">The product has been added to the cart successfully !!! <span style="float:right">b<span> </h1>
-<h1 id="message1" class="fail">LOGIN Required  !!! <span style="float:right">b<span> </h1>
+<h1 id="message" class="success_1">The product has been added to the cart successfully !!! <span style="float:right"><a href=""><img src="{% static 'User_Account/images/cross.png' %}" class=""></a><span> </h1>
+<h1 id="message1" class="fail">LOGIN Required  !!! <span style="float:right"><a href=""><img src="{% static 'User_Account/images/cross.png' %}" class=""></a><span> </h1>
 <div class="container my-5">
  <div class="row">
   <div class="col-sm-6 text-center align-self-center">
@@ -18,8 +18,9 @@
 </small></h4> <br>
 
   <button id="cart" class="btn btn-primary shadow px-5 py-2" >Add to Cart</button>
+  {% comment %} <button class="btn btn-danger shadow px-5 py-2 ms-4" >Buy Now</button> {% endcomment %}
    
-   <a href="" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a>
+   <a href="{% url "Buy_now" Product.PID %}" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a>
    <h5 class="mt-5">Available Offers</h5>
    <ul>
     <li>Bank Offer 5% Unlimited Cashback on Flipkart Axis Bank Credit</li>

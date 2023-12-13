@@ -1,19 +1,51 @@
-{% extends 'cart/base.html' %}
+{% extends 'User_Account/base.html' %}
 {% load static %}
 {% block title %}Buy Now{% endblock title %}
 {% block main-content %}
+{% load customfilters %}
 <div class="container my-5">
  <div class="row">
- <h3>Welcome Sonam</h3>
+ <h3>{{request.user.name}}</h3>
   <div class="col-sm-2 border-end">
-   <ul class="list-unstyled">
-    <li class="d-grid"><a href="{% url 'orders' %}" class="btn btn-primary">Orders</a></li>
-   </ul>
+    Filters later
+   
   </div>
   <div class="col-sm-9 offset-sm-1">
    <div class="row">
-    <div class="col-sm-6">Order 1</div>
-    <div class="col-sm-6">Order 2</div>
+
+{% for p in Products %}
+<div class="row my-5">
+    <div class="col-sm-3 text-center align-self-center"> 
+        <img src="{{p.PImage.url}}" alt="Image" class="img-fluid img-thumbnail shadow-sm" height="150" width="150">     
+    </div>
+    <div class="col-sm-9"> 
+        <div>
+            <h5><a href="{% url 'Product_Details' p.PID %}" class="Product_info"><strong>{{p.Brand}} {{p.PName}}</strong></a></h5>
+            <h8><strong>Category: </strong>{{p.Category}}</h8>
+            <div class="my-3">
+                <label for="quantity"><strong>Quantity:</strong></label>
+                <span id="quantity">{{p.Quantity}}</span>
+            </div> 
+
+            <div class="my-3">
+                <label for="Order_Date"><strong>Order On:</strong></label>
+                <span id="Order_Date">{{p.Order_time}}</span>
+                
+            </div> 
+
+
+
+            <div class="d-flex justify-content-between">
+                <p class="mb-0">
+                    <span><strong>Rs. {{p.Price|num_format}}</strong></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="text-muted">
+{% endfor %}
+
    </div>
   </div>
  </div>

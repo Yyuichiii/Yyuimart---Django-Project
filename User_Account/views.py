@@ -5,11 +5,9 @@ from django.http import HttpResponse,HttpResponseRedirect
 from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form,otp_form
 from .email import registration_email,password_email,order_recieved,email_otp
 from django.contrib import messages
-from django.contrib.auth import login,logout,authenticate,get_user_model,update_session_auth_hash
+from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
 import math, random
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe 
-from itertools import chain
-from django.core import serializers
 from django.views import View
 from datetime import datetime
 
@@ -72,7 +70,7 @@ def otpfun(request):
         fm=otp_form()
         otp_generated=str(generateOTP())
         request.session['otp_generated']=otp_generated     #otp is stored in session
-        email_otp(otp_generated,request.session['ue'])
+        # email_otp(otp_generated,request.session['ue'])   #Email service temporarily stopped
 
     if request.method=='POST':
         fm=otp_form(request.POST)
@@ -163,14 +161,11 @@ def cart_fun(request):
         messages.success(request,"Cart is Empty Please add Something first ")
         return redirect('home')
     else:
-        # Function defined below
-        # tp=total_Price(o) 
 
         tp=0
         for a in o:
             tp=tp+a.Price
 
-        tp=tp+100       #Added Shipping Charges
 
         return render(request,"User_Account/cart.html",{'Products':o,'Total_Price':tp})
 
@@ -317,8 +312,18 @@ def success(request):
         tp=tp+o.Price
         Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,Order_time=datetime.now(),PImage=o.PImage)
         
-    # order_recieved(str(tp),request.user)
-    order_recieved(obj,request.user,tp+100)
+# Email Service temporarily Stopped    
+    # order_recieved(obj,request.user,tp+100)
     obj.delete()
     messages.success(request,"Order has been Successfully Recevied ")
     return redirect("home")
+
+
+# Orders Section
+def orders(request):
+    if not(request.user.is_authenticated):
+        return redirect('home')
+    
+    obj=Order.objects.filter(user=request.user).order_by('-id')
+    
+    return render(request,"User_Account/orders.html",{'Products':obj})

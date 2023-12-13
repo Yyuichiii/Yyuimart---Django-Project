@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = "User_Account.CustomUser"
+AUTH_USER_MODEL = "User_Account.CustomUser"     #Registration of Custom User in Settings,py
 # Application definition
 
 INSTALLED_APPS = [
@@ -130,6 +130,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# Email Settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
@@ -137,7 +138,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'bussinessrtk@gmail.com'
 EMAIL_HOST_PASSWORD = 'gawo myxq wqlg rckz'
 
-
+# use for putting commas in thousand digit
 USE_THOUSAND_SEPARATOR = True
 
 
@@ -145,3 +146,5 @@ USE_THOUSAND_SEPARATOR = True
 MEDIA_URL = ''
 # Path where media is stored
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Product/Product_Images')
+
+

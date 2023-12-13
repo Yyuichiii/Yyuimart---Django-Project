@@ -5,14 +5,12 @@ from django.core.validators import RegexValidator
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
 from .managers import CustomUserManager
 
-
+# Custom validator for Phone number field
 class val(RegexValidator):
     message = _("Enter a valid Phone number.")
 
 
-
 # This is a custom user model inhertited from AbstractUser
-
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
@@ -21,13 +19,10 @@ class CustomUser(AbstractUser):
     Phone = models.CharField(_("Phone"),validators = [phoneNumberRegex], max_length=15, blank=False) 
     
         
-
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-
-    
-
-    objects = CustomUserManager()
+   
+    objects = CustomUserManager()       #Custom User Model Manager
 
     def __str__(self):
         return self.email

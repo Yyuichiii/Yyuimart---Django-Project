@@ -72,7 +72,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                 <li><a class="dropdown-item" href="{% url "profile" %}">Profile</a></li>
-                <li><a class="dropdown-item" href="">Orders</a></li>
+                <li><a class="dropdown-item" href="{% url 'orders' %}">Orders</a></li>
                 <li><a class="dropdown-item" href="{% url "password_change" %}">Change Password</a></li>
                 
                 <li><a class="dropdown-item" href="{% url "logout" %}">Logout</a></li>
@@ -98,7 +98,7 @@
     {% if messages %}
     
       {% for message in messages %}
-      <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+      <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}<span style="float:right"><a href=""><img src="{% static 'User_Account/images/cross.png' %}" class=""></a><span></div>
       {% endfor %}
     
 {% endif %}
