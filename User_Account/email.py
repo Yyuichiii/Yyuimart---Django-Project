@@ -30,7 +30,7 @@ def order_recieved(Queryset,email,tp):
         i=i+1
         dic=dic+m
         
-    message=intro+dic+"The total Price is Rs. "+str(tp)+"/-"+"\n\nRegards Team Yyuimart "
+    message=intro+dic+"The total Price is Rs. "+str(tp)+"/- with shipping charges included."+"\n\nRegards Team Yyuimart "
     
     recipient_list = [email]
     send_mail( subject, message, email_from, recipient_list )

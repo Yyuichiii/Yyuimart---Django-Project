@@ -110,6 +110,7 @@ def login_fun(request):
             if user is not None:
                 login(request,user)
                 messages.success(request, "Login Successfully !!!")
+                
                 return redirect('home')
             
                 
@@ -313,7 +314,7 @@ def success(request):
         Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,Order_time=datetime.now(),PImage=o.PImage)
         
 # Email Service temporarily Stopped    
-    # order_recieved(obj,request.user,tp+100)
+    order_recieved(obj,request.user,tp+100)
     obj.delete()
     messages.success(request,"Order has been Successfully Recevied ")
     return redirect("home")

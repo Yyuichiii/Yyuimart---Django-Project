@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,HttpResponseForbidden
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse,HttpResponseForbidden,Http404
 from .models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
 from User_Account.models import User_cart
 from django.contrib import messages
@@ -58,6 +58,7 @@ class add_cart_class(View):
     def get(self,request):
         print("yeh waala chala")
         if(not request.user.is_authenticated):
+            # print("sdfk")
             return HttpResponse(status=403)
         
         a=request.GET["id"]
@@ -157,6 +158,13 @@ class add_cart_class(View):
 
 class buy_now(View):
     def get(self, request,*args, **kwargs):
+        if(not request.user.is_authenticated):
+            messages.error(request, "Login to continue... !!!")
+            
+            # return redirect('login')   
+            return redirect(request.META.get('HTTP_REFERER'))
+            
+            
         for key,value in kwargs.items():
             a=value
 
