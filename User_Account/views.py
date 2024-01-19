@@ -70,7 +70,7 @@ def otpfun(request):
         fm=otp_form()
         otp_generated=str(generateOTP())
         request.session['otp_generated']=otp_generated     #otp is stored in session
-        # email_otp(otp_generated,request.session['ue'])   #Email service temporarily stopped
+        email_otp(otp_generated,request.session['ue'])   #Email service temporarily stopped
 
     if request.method=='POST':
         fm=otp_form(request.POST)
@@ -311,7 +311,7 @@ def success(request):
     obj=User_cart.objects.filter(user=request.user)
     for o in obj:
         tp=tp+o.Price
-        Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,Order_time=datetime.now(),PImage=o.PImage)
+        Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,PImage=o.PImage)
         
 # Email Service temporarily Stopped    
     order_recieved(obj,request.user,tp+100)
