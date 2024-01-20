@@ -2,6 +2,9 @@ from django.test import TestCase
 from User_Account.models import CustomUser,user_address,User_cart,Order
 from django.core.exceptions import ValidationError
 
+# coverage run --source='.' manage.py test User_Account
+# coverage report
+# coverage html
 
 class User_check_test(TestCase):
     def test_createuser(self):
