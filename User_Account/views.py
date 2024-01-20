@@ -70,23 +70,34 @@ def otpfun(request):
         fm=otp_form()
         otp_generated=str(generateOTP())
         request.session['otp_generated']=otp_generated     #otp is stored in session
+
         email_otp(otp_generated,request.session['ue'])   #Email service temporarily stopped
 
     if request.method=='POST':
-        fm=otp_form(request.POST)
-        if fm.is_valid():
+        print("1")
+        fm1=otp_form(request.POST)
+        print("2")
+        if fm1.is_valid():
+            print("3")
+            print(fm.data['otp_digit'])
+            print(fm.cleaned_data['otp_digit'])
             otp_user=fm.cleaned_data['otp_digit']
-            if request.session['otp_generated']==str(otp_user):
-                CustomUser.objects.create_user(request.session['ue'],request.session['up'],request.session['un'],request.session['uph'])    
-                registration_email(request.session['un'],request.session['ue'])
-                request.session.flush()
-                messages.success(request, "Account has been successfully created !!!")
-                return redirect('login')
+        # if request.session['otp_generated']==str(otp_user):
+            # CustomUser.objects.create_user(request.session['ue'],request.session['up'],request.session['un'],request.session['uph'])    
+            # registration_email(request.session['un'],request.session['ue'])
+            # request.session.flush()
+            # messages.success(request, "Account has been successfully created !!!")
+            # return redirect('login')
             
-            else:
-                messages.error(request, "OTP is Incorrect !!!")
-                fm=otp_form()
-                return render(request,'User_Account/otp.html',{'form':fm})
+        # else:
+            # print("m ismey mhi aana chahtah")
+            # messages.error(request, "OTP is Incorrect !!!")
+            # fm=otp_form()
+        return render(request,'User_Account/otp.html',{'form':fm1})
+        
+       
+    
+    
 
     return render(request,'User_Account/otp.html',{'form':fm})
 

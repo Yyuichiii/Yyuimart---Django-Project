@@ -46,20 +46,20 @@ class login_form(forms.Form):
         def get_invalid_login_error(self):
             return ValidationError(self.error_messages["invalid_login"],code="invalid_login",)
         
+        
         def clean(self):
             email = self.cleaned_data.get("email")
             password = self.cleaned_data.get("password")
 
             self.user_cache = authenticate(username=email, password=password)
+            
             if self.user_cache is None:
                 raise self.get_invalid_login_error()
+            
 
 class custom_password_change(PasswordChangeForm):
-    new_password1 = forms.CharField(
-        label=_("New password"),
-        widget=forms.PasswordInput(attrs={"autocomplete": "new-password","class": "form-control"}),
-        strip=False,
-        help_text=password_validation.password_validators_help_text_html(),)
+    new_password1 = forms.CharField(label=_("New password"),widget=forms.PasswordInput(attrs={"autocomplete": "new-password","class": "form-control"}),strip=False,help_text=password_validation.password_validators_help_text_html(),)
+    
     new_password2 = forms.CharField(
         label=_("New password confirmation"),
         strip=False,
@@ -114,3 +114,4 @@ class address_form(forms.ModelForm):
 
 class otp_form(forms.Form):
     otp_digit=forms.CharField(label='OTP',max_length=6,widget=forms.TextInput(attrs={'class': 'form-control',}))
+
