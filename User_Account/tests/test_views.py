@@ -6,66 +6,131 @@ import pdb
 
 class home_test(TestCase):
     def test_home_view(self):
+        # Created an admin for testing
         admin=CustomUser.objects.create_superuser(email="test@gmail.com",password="test1234")
+        # Login the Admin
         self.client.login(email="test@gmail.com",password="test1234")
         # Check if admin is login
         self.assertTrue('_auth_user_id' in self.client.session)
+
+        # Making get request
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
+        # Check if admin is logout usinn admin_logout function in home view
         self.assertFalse('_auth_user_id' in self.client.session)
+        # checking for the context return
         self.assertTrue('product' in response.context)
+        # checking for the correct html render
+        self.assertTemplateUsed(response, 'User_Account/home.html')
 
 
-class registeration(TestCase):
+class registration_test(TestCase):
     def test_registration_view(self):
+        # Checking get request with user authenticated
+        user=CustomUser.objects.create(email="test@gmail.com",password="test1234")
+        self.client.force_login(user=user)
+        response_with_user_login = self.client.get(reverse('registration'))
+        self.assertTemplateUsed('User_Account/home.html')
+        self.assertEqual(response_with_user_login.status_code,302)
+        self.client.logout()
+
+        # Checking if get request with user not authenticated
         response = self.client.get(reverse('registration'))
+        self.assertTrue(response.status_code,200)
         self.assertTrue('form' in response.context)
+        self.assertTemplateUsed('User_Account/customerregistration.html')
+
+        # Checking with post request
         post_data = {
-            'email': 'test@gmail.com',
+            'email': 'tesstttt@gmail.com',
             'name': 'ndrd',
             'Phone': '123456789',
             'password1': 'test1234#',
             'password2': 'test1234#',
         }
-        response = self.client.post(reverse('registration'),data=post_data)
-        form = User_Reg(data=post_data)
-        self.assertTrue(form.is_valid())
-        self.assertTrue('ue' in self.client.session)
-        self.assertEqual(self.client.session['ue'], "test@gmail.com")
-        self.assertEqual(response.status_code, 302)
+        response = self.client.post(reverse('registration'),data=post_data,follow=False)
+        user_inactive=CustomUser.objects.get(email=post_data['email'])
+        # Checking if the user is active or not
+        self.assertFalse(user_inactive.is_active)
+        self.assertEqual(response.status_code,302)
+        self.assertTemplateNotUsed('User_Account/customerregistration.html')
 
-        # After form.is_valid() , request redirects to the otpfun 
-        response = self.client.get(reverse('otp'),HTTP_REFERER='otp')
-        self.assertEqual(self.client.session['ue'], "test@gmail.com")
+
+    def test_otp_generation(self):
+        # Test for generating otp for inactive user using the get request
+        post_data = {
+            'email': 'tesstttt@gmail.com',
+            'name': 'ndrd',
+            'Phone': '123456789',
+            'password1': 'test1234#',
+            'password2': 'test1234#',
+        }
+        response = self.client.post(reverse('registration'),data=post_data,follow=True)
+        self.assertEqual(response.status_code,200)
+        self.assertTrue("form" in response.context)
         self.assertTrue('otp_generated' in self.client.session)
-        self.assertIsInstance(response.context['form'], otp_form)
-        self.assertNotEqual(response.status_code, 302)
-        print(self.client.session['otp_generated'])
+        self.assertTemplateUsed('User_Account/otp.html')
 
 
-
-
-
-        data1={'otp_digit':self.client.session['otp_generated']}
-
-
-        response_post=self.client.post(reverse('otp'),HTTP_REFERER='otp')
-        form2=otp_form(data=data1)
-        form2.is_valid()
-        # pdb.set_trace()
-        self.assertTrue(form2.is_valid())
-        # self.assertTrue(CustomUser.objects.filter(email='test@gmail.com').exists())
-        # pdb.set_trace()
-        # self.assertEqual(response_post.status_code, 302)
+    def test_otp_verification(self):
+        # Test for verifing otp for inactive user using the post request and making the user active
+        post_data = {
+            'email': 'tesstttt@gmail.com',
+            'name': 'ndrd',
+            'Phone': '123456789',
+            'password1': 'test1234#',
+            'password2': 'test1234#',
+        }
+        # Making post request to the registration so it can generate the redirect dynamic link for otp verification process
+        response = self.client.post(reverse('registration'),data=post_data,follow=False)
+        # Making get request to the  generated url to get the generated otp in the session 
+        response1=self.client.get(response.url)
         
 
-    def test_otp_verfication(self):
-        data2={'otp_digit':'123456'}
-        response_post=self.client.post(reverse('otp'),HTTP_REFERER='otp')
-        form2=otp_form(data=data2)
-        form2.is_valid()
-        form2.is_valid()
-        # pdb.set_trace()
+        # Passing the random otp to the data which will be sent to the post request to the url of otp verification
+        otp_data={
+            'otp_digit':'random'
+        }
+        # making the post request to the otp verification with incorrect otp passed through the post data
+        response2=self.client.post(response.url,data=otp_data)
+        # If the otp is incorrrect the request return back to the otp verfication form page
+        self.assertEqual(response2.status_code,200)
+        self.assertTemplateUsed('User_Account/otp.html')
+        user=CustomUser.objects.get(email=post_data['email'])
+        self.assertFalse(user.is_active)
+
+
+        # Passing the generated otp to the data which will be sent to the post request to the url of otp verification
+        otp_data={
+            'otp_digit':self.client.session['otp_generated']
+        }
+        # finally making the post request to the otp verification with correct otp passed through the post data
+        response3=self.client.post(response.url,data=otp_data)
+        # If the otp verification get successfully , the request redirects to the login page
+        self.assertEqual(response3.status_code,302)
+        self.assertTemplateUsed('User_Account/login.html')
+        user=CustomUser.objects.get(email=post_data['email'])
+        self.assertTrue(user.is_active)
+    
+    
+        # If someone makes a random url , it will redirect it to the home page 
+        dynamic_part = "test/testqweweres/"
+        random_url = f"/otp/{dynamic_part}"
+        expected_response=self.client.get(random_url)
+        self.assertEqual(response.status_code,302)
+        self.assertTemplateUsed('User_Account/home.html')
+
+
+        
 
 
 
+
+        
+        
+
+    
+
+
+
+    
