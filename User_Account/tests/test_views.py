@@ -120,6 +120,33 @@ class registration_test(TestCase):
         self.assertEqual(response.status_code,302)
         self.assertTemplateUsed('User_Account/home.html')
 
+    def test_token_invalid(self):
+        post_data = {
+            'email': 'tesstttt@gmail.com',
+            'name': 'ndrd',
+            'Phone': '123456789',
+            'password1': 'test1234#',
+            'password2': 'test1234#',
+        }
+        # Making post request to the registration so it can generate the redirect dynamic link for otp verification process
+        response = self.client.post(reverse('registration'),data=post_data,follow=False)
+        # Making get request to the  generated url(otp verification) to retrieve the generated otp in the session 
+        response1=self.client.get(response.url)
+        t=response.url.split('/')
+        uid=t[-3]
+        # Generated an url with token which is either invalid/incorrect or expired
+        custumer_url=reverse('otp',kwargs={'uid':uid,'token':'randomtoken'})
+        otp_data={
+            'otp_digit':self.client.session['otp_generated']
+        }
+        # finally making the post request to the otp verification with correct otp passed but wrong token through the post data
+        response3=self.client.post(custumer_url,data=otp_data)
+        # This will redirect the view to register and the user will be deleted
+        self.assertTemplateUsed('User_Account/registration.html')
+        self.assertFalse(CustomUser.objects.filter(email=post_data['email']).exists())
+
+
+
 
         
 
