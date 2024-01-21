@@ -136,4 +136,5 @@ MEDIA_URL = ''
 # Path where media is stored
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Product/Product_Images')
 
-
+# Token Timeout in sec
+PASSWORD_RESET_TIMEOUT = 300
