@@ -27,9 +27,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     "phonenumber_field",
     'User_Account',
     'Product',
+    'API',
     'mathfilters',
 ]
 
@@ -130,6 +132,10 @@ EMAIL_HOST_PASSWORD = 'gawo myxq wqlg rckz'
 # use for putting commas in thousand digit
 USE_THOUSAND_SEPARATOR = True
 
+# SITE name and domain
+SITE_DOMAIN = "http://localhost:8000"
+SITE_NAME = "Yyuimart"
+
 
 # Base url to serve media files
 MEDIA_URL = ''
@@ -138,3 +144,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'Product/Product_Images')
 
 # Token Timeout in sec
 PASSWORD_RESET_TIMEOUT = 300
+
+# API Related Settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        
+    ),
+    
+}

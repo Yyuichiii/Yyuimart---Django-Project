@@ -3,6 +3,7 @@ from User_Account.models import CustomUser
 from User_Account.forms import User_Reg,otp_form
 from django.urls import reverse
 import pdb
+from django.core import mail
 
 class home_test(TestCase):
     def test_home_view(self):
@@ -69,6 +70,11 @@ class registration_test(TestCase):
         self.assertEqual(response.status_code,200)
         self.assertTrue("form" in response.context)
         self.assertTrue('otp_generated' in self.client.session)
+
+        # Testing for the email
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject,'OTP Verification on Yyuimart')
+
         self.assertTemplateUsed('User_Account/otp.html')
 
 
