@@ -1,15 +1,9 @@
 from django.conf import settings
-from django.core.mail import send_mail
-
+from django.core.mail import send_mail,EmailMessage,EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
 email_from = settings.EMAIL_HOST_USER
-
-
-# Send Email for refistration
-def registration_email(name,email):
-    subject = 'Welcome to Yyuicart !!!'
-    message = 'Hi '+name+' thank you for creating the account in Yyuicart.\n\nHope you have a good day ahead !!!'
-    recipient_list = [email]
-    send_mail( subject, message, email_from, recipient_list )
 
 # Email for Password Change
 def password_email(name,email):
@@ -35,10 +29,39 @@ def order_recieved(Queryset,email,tp):
     recipient_list = [email]
     send_mail( subject, message, email_from, recipient_list )
 
-
 # Email for OTP CONFIRMATION
-def email_otp(generated_otp,email):
-    subject = 'OTP !!!'
-    message = 'The OTP for the registration of your Account is:.\n\n'+generated_otp+ '\n\nRegards Team Yyuicart'
-    recipient_list = [email]
-    send_mail( subject, message, email_from, recipient_list )
+def email_otp(generated_otp,email,name):
+    subject = 'OTP Verification on '+settings.SITE_NAME
+    from_email = settings.EMAIL_HOST_USER
+    to = [email]
+    data={
+        'otp':generated_otp,
+        'Name':name,
+        'Company':settings.SITE_NAME
+    }
+     # Load the HTML template
+    html_content = render_to_string('User_Account/otp_email.html', {'data': data})
+    # Create the email body with both HTML and plain text versions
+    text_content = strip_tags(html_content)   
+    email = EmailMultiAlternatives(subject, text_content, from_email, to)
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+
+
+
+# Email for successful Registration
+def email_success_register(email,name):
+    subject = 'OTP Verification on '+settings.SITE_NAME
+    from_email = settings.EMAIL_HOST_USER
+    to = [email]
+    data={
+        'Name':name,
+        'Company':settings.SITE_NAME
+    }
+     # Load the HTML template
+    html_content = render_to_string('User_Account/register_success_email.html', {'data': data})
+    # Create the email body with both HTML and plain text versions
+    text_content = strip_tags(html_content)   
+    email = EmailMultiAlternatives(subject, text_content, from_email, to)
+    email.attach_alternative(html_content, "text/html")
+    email.send()

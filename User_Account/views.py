@@ -3,7 +3,7 @@ from .models import user_address,CustomUser,User_cart,Order
 from django.urls import reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form,otp_form
-from .email import registration_email,password_email,order_recieved,email_otp
+from .email import password_email,order_recieved,email_otp,email_success_register
 from django.contrib import messages
 from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe 
@@ -53,7 +53,6 @@ def registration(request):
 
     return render(request,'User_Account/customerregistration.html',{'form':fm},status=200)
 
-
 # Function for OTP VERIFICATION
 def otpfun(request,uid,token):
   
@@ -65,7 +64,7 @@ def otpfun(request,uid,token):
         
             request.session['otp_generated']=otp_generated     #otp is stored in session
 
-            email_otp(otp_generated,user.email)
+            email_otp(otp_generated,user.email,user.name)
             return render(request,'User_Account/otp.html',{'form':fm,'uid':uid,'token':token},status=200)
         except:
             return redirect('home')
@@ -79,8 +78,10 @@ def otpfun(request,uid,token):
                 if PasswordResetTokenGenerator().check_token(user=inactive_user,token=token):
                     inactive_user.is_active=True
                     inactive_user.save()
+                    email_success_register(inactive_user.email,inactive_user.name)
                     request.session.flush()
                     messages.success(request, "Account has been successfully created !!!")
+
                     return redirect('login')
             
                 else:

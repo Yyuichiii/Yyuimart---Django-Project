@@ -1,0 +1,57 @@
+{
+	"info": {
+		"_postman_id": "3c842156-d85d-4163-bfcf-8e03631cf44d",
+		"name": "Yyuimart_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32175619"
+	},
+	"item": [
+		{
+			"name": "Registeration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"ritikmehra38@gmail.com\",\r\n    \"name\":\"Ritik\",\r\n    \"Phone\":\"127845469\",\r\n    \"password1\":\"qwervcxz\",\r\n    \"password2\":\"qwervcxz\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/register/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Otp_verification",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
