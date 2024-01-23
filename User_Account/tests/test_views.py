@@ -30,7 +30,7 @@ class registration_test(TestCase):
         # Checking get request with user authenticated
         user=CustomUser.objects.create(email="test@gmail.com",password="test1234")
         self.client.force_login(user=user)
-        response_with_user_login = self.client.get(reverse('registration'))
+        response_with_user_login = self.client.get(reverse('registration'),content_type='text/html')
         self.assertTemplateUsed('User_Account/home.html')
         self.assertEqual(response_with_user_login.status_code,302)
         self.client.logout()

@@ -18,11 +18,7 @@ from django.utils.decorators import method_decorator
 # Create your views here.
 
 # API View function for Registeration of user
-# @method_decorator(csrf_protect, name='dispatch')
 class Register_view(APIView):
-    # Use SessionAuthentication
-    authentication_classes = [SessionAuthentication]  
-    # permission_classes = [AllowAny]
 
     def post(self, request, format=None):
         serializer=User_serializer(data=request.data)
@@ -32,23 +28,27 @@ class Register_view(APIView):
             uid=urlsafe_base64_encode(force_bytes(user.id))
             url=reverse('otp', kwargs={'uid':uid,'token':token})
             link = f'{settings.SITE_DOMAIN}/api{url}'
+            # Generating the link for otp verification and get/post request to the link should be from the same browser for security reasons
             return Response({'Verification Link':link},status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class Otp_view(APIView):
     def get(self,request,uid,token,format=None):
-        user=CustomUser.objects.get(id=urlsafe_base64_decode(force_str(uid)))
-        if PasswordResetTokenGenerator().check_token(user=user,token=token):
-            generated_otp=generateOTP(6)
-            email_otp(generated_otp,user.email,user.name)
-            request.session['otp_generated']=generated_otp
-            print(request.session.get('otp_generated'))
-            return Response({"msg":"The email has been sent"},status=status.HTTP_200_OK)
-        else:
-            user.delete()
-            request.session.flush()
-            return Response({"msg":"The otp verification window closed!!!"},status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user=CustomUser.objects.get(id=urlsafe_base64_decode(force_str(uid)))
+            if PasswordResetTokenGenerator().check_token(user=user,token=token):
+                generated_otp=generateOTP(6)
+                email_otp(generated_otp,user.email,user.name)
+                request.session['otp_generated']=generated_otp
+                print("The otp is :",request.session.get('otp_generated'))
+                return Response({"msg":"The email has been sent"},status=status.HTTP_200_OK)
+            else:
+                request.session.flush()
+                return Response({"msg":"The otp verification window closed!!!"},status=status.HTTP_400_BAD_REQUEST)
+            
+        except:
+            return Response({"msg":"Cannot access the Page"},status=status.HTTP_403_FORBIDDEN)
         
 
     def post(self,request,uid,token,format=None):
@@ -57,6 +57,7 @@ class Otp_view(APIView):
             if request.data['otp']==request.session.get('otp_generated'):
                 user.is_active=True
                 user.save()
+                request.session.flush()
                 email_success_register(user.email,user.name)
                 return Response({"msg":"The user has been verified successfully"},status=status.HTTP_201_CREATED)
 

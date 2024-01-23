@@ -146,10 +146,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'Product/Product_Images')
 PASSWORD_RESET_TIMEOUT = 300
 
 # API Related Settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.SessionAuthentication',
         
-    ),
+#     ),
     
-}
+# }

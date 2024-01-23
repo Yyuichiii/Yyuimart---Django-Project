@@ -19,10 +19,6 @@ class User_serializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Password and Confirm_Password doesn't match.")
         return attrs
     
-    def validate_email(self,email):
-        if CustomUser.objects.filter(email=email).exists():
-            raise serializers.ValidationError('user with this Email already exists.')
-        return email
 
     def create(self, validated_data):
         user = CustomUser.objects.create_user(email=validated_data['email'],password=validated_data['password1'],name=validated_data['name'],Phone=validated_data['Phone'])
