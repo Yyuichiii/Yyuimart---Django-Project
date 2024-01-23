@@ -1,6 +1,5 @@
 from django.test import TestCase
 from User_Account.models import CustomUser
-from User_Account.forms import User_Reg,otp_form
 from django.urls import reverse
 import pdb
 from django.core import mail
@@ -152,7 +151,46 @@ class registration_test(TestCase):
         self.assertFalse(CustomUser.objects.filter(email=post_data['email']).exists())
 
 
+class test_login(TestCase):
+    def test_login_success(self):
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test123")
+        User.save()
+        post_data={
+            'email':'test@gmail.com',
+            'password':'test123'
+        }
+        response=self.client.post(reverse('login'),data=post_data)
+        user_id = self.client.session['_auth_user_id']
+        user = CustomUser.objects.get(id=user_id)
+        self.assertEqual(user.email,post_data['email'])
+        self.assertEqual(response.status_code,302)
+        self.assertTemplateUsed('User_Account/home.html')
 
+        # Testing if user is already login
+        
+        post_data={
+            'email':'test@gmail.com',
+            'password':'test123'
+        }
+        response=self.client.post(reverse('login'),data=post_data)
+        self.assertEqual(response.status_code,302)
+        self.assertTrue('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/home.html')
+        
+        
+        # Testing for invalid login credientials 
+        self.client.logout()  #Make the previous logout
+        post_data={
+            'email':'test@gmail.com',
+            'password':'invalid_password'
+        }
+        response=self.client.post(reverse('login'),data=post_data)
+        # User will not login
+        self.assertFalse('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/login.html')
+
+        
+        
 
         
 
