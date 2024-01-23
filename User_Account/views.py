@@ -78,6 +78,7 @@ def otpfun(request,uid,token):
                 if PasswordResetTokenGenerator().check_token(user=inactive_user,token=token):
                     inactive_user.is_active=True
                     inactive_user.save()
+                    # This email services can be delay and will not impact on the other services
                     email_success_register(inactive_user.email,inactive_user.name)
                     request.session.flush()
                     messages.success(request, "Account has been successfully created !!!")
@@ -97,16 +98,13 @@ def otpfun(request,uid,token):
 
 # Login
 def login_fun(request):    
-    admin_logout(request)
-   
+    admin_logout(request)   
     if(request.user.is_authenticated):
         return redirect('home')
     request.session.flush()
     fm=login_form()
     
-
     if request.method=="POST":
-        
         fm = login_form(request.POST)
         if fm.is_valid():
             uemail=fm.cleaned_data['email'] 
@@ -114,12 +112,9 @@ def login_fun(request):
             user = authenticate(email=uemail,password=upas)
             if user is not None:
                 login(request,user)
-                messages.success(request, "Login Successfully !!!")
-                
+                messages.success(request, "Login Successfully !!!")                
                 return redirect('home')
-            
-                
-            
+                        
     return render(request,'User_Account/login.html',{'form':fm})
 
 # Logout
