@@ -1,5 +1,5 @@
 from django.test import TestCase
-from User_Account.models import CustomUser
+from User_Account.models import CustomUser,user_address
 from django.urls import reverse
 import pdb
 from django.core import mail
@@ -189,10 +189,141 @@ class test_login(TestCase):
         self.assertFalse('_auth_user_id' in self.client.session)
         self.assertTemplateUsed('User_Account/login.html')
 
+
+class test_logout_view(TestCase):
+    def test_logout(self):
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test123")
+        User.save()
+        self.client.login(email="test@gmail.com",password="test123")
+        response=self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code,302)
+        self.assertFalse('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/home.html')
+
+
+class test_profile_view(TestCase):
+    def test_profile_get(self):
+        # test when user is not authenticated
+        response=self.client.get(reverse('profile'))
+        self.assertEqual(response.status_code,302)
+        self.assertFalse('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/login.html')
         
+        # test when user is  authenticated
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test123")
+        User.save()
+        self.client.login(email="test@gmail.com",password="test123")
+        response1=self.client.get(reverse('profile'))
+        self.assertEqual(response1.status_code,200)
+        self.assertTrue('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/profile.html')
+
+
+    def test_profile_post(self):
+    
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test123")
+        User.save()
+        self.client.login(email="test@gmail.com",password="test123")
+        data={
+            'name':'Test_name',
+            'Phone':'1234567899'
+        }
+
+        response=self.client.post(reverse('profile'),data=data)
+        
+        self.assertEqual(response.status_code,302)
+        self.assertTrue('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/home.html')
         
 
+class test_password_change_view(TestCase):
+    def test_password_change_get(self):
+        # test when user is not authenticated
+        response=self.client.get(reverse('password_change'))
+        self.assertEqual(response.status_code,302)
+        self.assertFalse('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/login.html')
         
+        # test when user is  authenticated
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test123")
+        User.save()
+        self.client.login(email="test@gmail.com",password="test123")
+        response1=self.client.get(reverse('password_change'))
+        self.assertEqual(response1.status_code,200)
+        self.assertTrue('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/changepassword.html')
+
+
+    def test_password_change_post(self):
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test12333r")
+        User.save()
+        self.client.login(email="test@gmail.com",password="test12333r")
+                
+        data1={
+            'old_password':'test12333r',
+            'new_password1':'123t33##',
+            'new_password2':'123t33##'
+        }
+
+        response=self.client.post(reverse('password_change'),data=data1)
+        self.assertEqual(response.status_code,302)
+        self.assertTrue('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/home.html')
+
+
+class test_address_view(TestCase):
+    def test_address_get(self):
+        # test when user is not authenticated
+        response=self.client.get(reverse('address'))
+        self.assertEqual(response.status_code,302)
+        self.assertFalse('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/login.html')
+        
+        # test when user is authenticated
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test123")
+        User.save()
+        self.client.login(email="test@gmail.com",password="test123")
+        response1=self.client.get(reverse('address'))
+        self.assertEqual(response1.status_code,200)
+        self.assertTrue('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/address.html.html')
+        User.delete()
+
+        # test when user is authenticated and already has set address
+        print("test yha shurur hoga")
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test123")
+        User.save()
+        address=user_address.objects.create(user=User,Name="test_name",Phone="12354656",Pincode="123456",State="test_State",house_no='test_house_no',Road_name='test_Road_name')
+        address.save()
+        self.client.login(email="test@gmail.com",password="test123")
+        
+        response2=self.client.get(reverse('address'))
+        self.assertEqual(response2.status_code,200)
+        self.assertTrue('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/address.html.html')
+        User.delete()
+        print("test end")
+
+
+    def test_address_post(self):
+        User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test12333r")
+        User.save()
+        self.client.login(email="test@gmail.com",password="test12333r")
+                
+        data1={
+                'Name':"Test_name",
+                'Phone':"12234345",
+                'Pincode':"123456",
+                'State':"test_State",
+                'house_no':'test_house_no',
+                'Road_name':'test_Road_name',
+        }
+
+        response=self.client.post(reverse('address'),data=data1)
+        self.assertEqual(response.status_code,302)
+        self.assertTrue('_auth_user_id' in self.client.session)
+        self.assertTemplateUsed('User_Account/home.html')
+
 
 
 
