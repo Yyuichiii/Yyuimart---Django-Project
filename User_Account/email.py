@@ -5,13 +5,6 @@ from django.utils.html import strip_tags
 from django.conf import settings
 email_from = settings.EMAIL_HOST_USER
 
-# Email for Password Change
-def password_email(name,email):
-    subject = 'Password Changed !!!'
-    message = 'Hi '+name+' ,your password as been changed successfully.\n\nHope you have a good day ahead !!!\n\nRegards Team Yyuicart'
-    recipient_list = [email]
-    send_mail( subject, message, email_from, recipient_list )
-
 
 # Email for Recieved Orders
 def order_recieved(Queryset,email,tp):
@@ -65,3 +58,22 @@ def email_success_register(email,name):
     email = EmailMultiAlternatives(subject, text_content, from_email, to)
     email.attach_alternative(html_content, "text/html")
     email.send()
+
+
+# Email for Password Change
+def password_email(name,email):
+    subject = 'Password Changed !!!'
+    from_email = settings.EMAIL_HOST_USER
+    to = [email]
+    data={
+        'Name':name,
+        'Company':settings.SITE_NAME
+    }
+    # Load the HTML template
+    html_content = render_to_string('User_Account/password_change_email.html', {'data': data})
+    # Create the email body with both HTML and plain text versions
+    text_content = strip_tags(html_content)   
+    email = EmailMultiAlternatives(subject, text_content, from_email, to)
+    email.attach_alternative(html_content, "text/html")
+    email.send()
+    

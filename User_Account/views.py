@@ -95,7 +95,6 @@ def otpfun(request,uid,token):
                 messages.error(request, "OTP Incorrect. Try Again !!!")
                 return render(request,'User_Account/otp.html',{'form':fm,'uid':uid,'token':token})
           
-
 # Login
 def login_fun(request):    
     admin_logout(request)   
@@ -133,6 +132,7 @@ def profile(request):
         fm = User_Change_Reg(request.POST,instance=request.user)
         if fm.is_valid():
              fm.save()
+             messages.success(request, "Profile has been updated !!!")
              return redirect('home')
 
     return render(request,'User_Account/profile.html',{'form':fm})
@@ -144,15 +144,54 @@ def password_change(request):
         return redirect('login')
     fm=custom_password_change(request.user)
     if request.method == 'POST':
-
         fm = custom_password_change(request.user, request.POST)
         if fm.is_valid():
             user = fm.save()
             update_session_auth_hash(request, user)  # To keep the user logged in
-            # password_email(user.name,user.email)  # For activating the email service
+            password_email(user.name,user.email)  # For activating the email service
             messages.success(request, "Password is changed Successfully !!!")
             return redirect('home')
     return render(request,'User_Account/changepassword.html',{'form':fm})
+
+
+# Class based Address
+class address(View):  
+
+    def get(self,request):
+        admin_logout(request)
+        if(not request.user.is_authenticated):
+            return redirect('login')
+        
+        # 
+        address_querset=user_address.objects.filter(user=request.user)
+        if not address_querset.exists():        
+            fm=address_form()
+        else:
+            address_object=user_address.objects.get(user=request.user)
+            
+            initial_dict = { 
+                'Name':address_querset[0].Name,
+                'Phone':address_querset[0].Phone,
+                'Pincode':address_querset[0].Pincode,
+                'State':address_querset[0].State,
+                'house_no':address_querset[0].house_no,
+                'Road_name':address_querset[0].Road_name,
+                } 
+            fm=address_form(initial=initial_dict)
+            
+
+        return render(request,'User_Account/address.html',{'form':fm})
+        
+    def post(self,request):
+        fm = address_form(request.POST)
+        if fm.is_valid():
+            obj=fm.save(commit=False)
+            obj.user=request.user
+            obj.save()
+            messages.success(request, "Address has been successfully changed !!!")
+            return redirect('profile')
+        
+
 
 # User Cart
 def cart_fun(request):   
@@ -195,41 +234,7 @@ def total_Price(o):
 
     return tp
 
-# Class based Address
-class address(View):  
-    def get(self,request):
-        admin_logout(request)
-        if(not request.user.is_authenticated):
-            return redirect('login')
-        
-        objj=user_address.objects.filter(user=request.user)
-        if not objj.exists():
-        
-            fm=address_form()
-        else:
-            for obj in objj:
-                initial_dict = { 
-                    'Name':obj.Name,
-                    'Phone':obj.Phone,
-                    'Pincode':obj.Pincode,
-                    'State':obj.State,
-                    'house_no':obj.house_no,
-                    'Road_name':obj.Road_name,
-                } 
-            fm=address_form(initial=initial_dict)
 
-        return render(request,'User_Account/address.html',{'form':fm})
-        
-
-    def post(self,request):
-        fm = address_form(request.POST)
-        if fm.is_valid():
-            obj=fm.save(commit=False)
-            obj.user=request.user
-            obj.save()
-            messages.success(request, "Address has been successfully changed !!!")
-            return redirect('profile')
-        
 
 # Function to delete the cart item
 def delete(request,i):
