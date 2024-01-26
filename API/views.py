@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions
+from django.contrib.auth import authenticate,login,logout
+from rest_framework import permissions
 from User_Account.models import CustomUser
-from API.serializers import User_serializer
+from API.serializers import User_serializer,LoginSerializers,User_ProfileSerializer
 from rest_framework import status
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
@@ -12,10 +13,30 @@ from django.urls import reverse
 from django.conf import settings
 from User_Account.utils import generateOTP
 from User_Account.email import email_otp,email_success_register
-from rest_framework.authentication import SessionAuthentication
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect,csrf_exempt
-from django.utils.decorators import method_decorator
+from rest_framework_simplejwt.tokens import RefreshToken,AccessToken
+from rest_framework.permissions import IsAuthenticated
+
+
+
 # Create your views here.
+
+# function  to generate the token with refresh token
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh_token': str(refresh),
+        'access_token': str(refresh.access_token),
+    }
+
+# function  to generate the token 
+def get_token(user):
+    access=AccessToken.for_user(user)
+
+    return {
+        'access_token': str(access),
+    }
+
 
 # API View function for Registeration of user
 class Register_view(APIView):
@@ -68,3 +89,57 @@ class Otp_view(APIView):
             user.delete()
             request.session.flush()        
         return Response({"msg":"The otp verification window closed!!!"},status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class LoginView(APIView):
+    def post(self, request, format=None):
+        serializer=LoginSerializers(data=request.data)
+        if serializer.is_valid():
+            email=serializer.data.get('email')
+            password=serializer.data.get('password')
+            user=authenticate(email=email,password=password)
+            if user is not None:
+                # token=get_tokens_for_user(user)
+                token=get_token(user)
+                login(request,user)
+            return Response({'token':token},status=status.HTTP_200_OK)
+
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+
+class LogoutView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request,format=None):
+        try:
+            # authorization_header = request.headers.get('Authorization')
+            # if authorization_header and authorization_header.startswith('Bearer '):
+            #     token = authorization_header.split()[1]
+            #     access_token=RefreshToken(token)
+            #     access_token.blacklist()
+            logout(request)
+            return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class User_Profile(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self,request,format=None):
+        # authorization_header = request.headers.get('Authorization')
+        # if authorization_header and authorization_header.startswith('Bearer '):
+        #     token = authorization_header.split()[1]
+        #     print(token)
+            serializer=User_ProfileSerializer(request.user)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+            
+    def patch(self,request,format=None):
+        serializer=User_ProfileSerializer(data=request.data,instance=request.user,partial=True)  
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        
+        else:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+        
+

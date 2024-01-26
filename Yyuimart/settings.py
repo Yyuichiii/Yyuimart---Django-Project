@@ -28,10 +28,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    "phonenumber_field",
-    'User_Account',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'Product',
     'API',
+    "phonenumber_field",
+    'User_Account',
     'mathfilters',
 ]
 
@@ -146,12 +148,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'Product/Product_Images')
 PASSWORD_RESET_TIMEOUT = 300
 
 # API Related Settings
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.SessionAuthentication',
-        
-#     ),
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
     
-# }
+# SIMPLE_JWT Related Settings
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
 
 

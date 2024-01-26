@@ -26,3 +26,20 @@ class User_serializer(serializers.ModelSerializer):
         user.is_active=False
         user.save()
         return user
+    
+
+class LoginSerializers(serializers.Serializer):
+    email=serializers.EmailField(max_length=255)
+    password=serializers.CharField(style={'input_type':'password'})
+
+
+class User_ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['name','Phone']
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.Phone = validated_data.get('Phone', instance.Phone)
+        instance.save()
+        return instance
