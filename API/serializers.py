@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from User_Account.models import CustomUser
+from User_Account.models import CustomUser,user_address
 
 
 class User_serializer(serializers.ModelSerializer):
@@ -43,3 +43,24 @@ class User_ProfileSerializer(serializers.ModelSerializer):
         instance.Phone = validated_data.get('Phone', instance.Phone)
         instance.save()
         return instance
+    
+
+class User_AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = user_address
+        fields = ['Name','Phone','Pincode','State','house_no','Road_name']
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password=serializers.CharField(style={'input_type':'password'})
+    new_password1=serializers.CharField(style={'input_type':'password'})
+    new_password2=serializers.CharField(style={'input_type':'password'})
+
+
+    def validate(self, attrs):
+        new_password1 = attrs.get('new_password1')
+        new_password2 = attrs.get('new_password2')
+
+        if new_password1 != new_password2:
+            raise serializers.ValidationError("Password and Confirm_Password doesn't match.")
+        return attrs
