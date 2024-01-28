@@ -29,8 +29,6 @@ def get_tokens_for_user(user):
     }
 
 
-
-
 # API View function for Registeration of user
 class Register_view(APIView):
 
@@ -96,8 +94,10 @@ class LoginView(APIView):
             if user is not None:
                 token=get_tokens_for_user(user)
                 return Response({'token':token},status=status.HTTP_200_OK)
-
-        return Response({'error':'User is not Authenticated'},status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'error':'User is not Authenticated'},status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
     
 # APIView for generating the new AccessToken from the refresh token
 class Refresh_token_view(APIView):
@@ -105,7 +105,7 @@ class Refresh_token_view(APIView):
         try:
             refresh_token = request.data.get("refresh_token")
             if not refresh_token:
-                return Response({"error": "Refresh token is required."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Refresh token is required."}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
             token = RefreshToken(refresh_token)
             access_token = str(token.access_token)
@@ -142,7 +142,7 @@ class User_Address_View(APIView):
             return Response(serializer.data,status=status.HTTP_200_OK)
 
         except:
-            return Response({"message": "User address not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "User address not found."}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self,request,format=None):
         user_address_query = user_address.objects.filter(user=request.user)
