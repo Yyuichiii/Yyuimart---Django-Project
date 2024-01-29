@@ -290,7 +290,6 @@ class test_address_view(TestCase):
         User.delete()
 
         # test when user is authenticated and already has set address
-        print("test yha shurur hoga")
         User=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="12345678",password="test123")
         User.save()
         address=user_address.objects.create(user=User,Name="test_name",Phone="12354656",Pincode="123456",State="test_State",house_no='test_house_no',Road_name='test_Road_name')
@@ -302,7 +301,6 @@ class test_address_view(TestCase):
         self.assertTrue('_auth_user_id' in self.client.session)
         self.assertTemplateUsed('User_Account/address.html.html')
         User.delete()
-        print("test end")
 
 
     def test_address_post(self):
