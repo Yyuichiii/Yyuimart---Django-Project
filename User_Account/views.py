@@ -209,32 +209,6 @@ def cart_fun(request):
 
         return render(request,"User_Account/cart.html",{'Products':o,'Total_Price':tp})
 
-# Function for calculating the total price in the cart
-def total_Price(o):    
-    tp=0
-    for a in o:
-        
-        if a.ID_Mobile:
-            tp=tp+a.Quantity*a.ID_Mobile.Price
-        
-        if a.ID_Laptop:
-            tp=tp+a.Quantity*a.ID_Laptop.Price
-
-        if a.ID_Headphone:
-            tp=tp+a.Quantity*a.ID_Headphone.Price
-
-        if a.ID_Men:
-            tp=tp+a.Quantity*a.ID_Men.Price
-
-        if a.ID_Women:
-            tp=tp+a.Quantity*a.ID_Women.Price
-
-        if a.ID_Shoe:
-            tp=tp+a.Quantity*a.ID_Shoe.Price
-
-    return tp
-
-
 
 # Function to delete the cart item
 def delete(request,i):
@@ -319,12 +293,14 @@ def success(request):
         Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,PImage=o.PImage)
         
 # Email Service temporarily Stopped    
-    order_recieved(obj,request.user,tp+100)
+    print(request.user.name)
+    order_recieved(obj,request.user,tp,request.user.name)
     obj.delete()
     messages.success(request,"Order has been Successfully Recevied ")
     return redirect("home")
 
 
+# Note- Implement Pagination and make it render fast
 # Orders Section
 def orders(request):
     if not(request.user.is_authenticated):
