@@ -11,7 +11,7 @@
       <div class="card mb-2">
         <div class="card-body">
           {% for p in product %}
-          <h5>{{p.Brand}} {{p.PName}}</p>
+          <h5>{{p.Brand}} {{p.PName}} (x{{p.Quantity}})</p>
           <p class="fw-bold">Price : Rs. {{p.Price}}/-</p>
           {% endfor %}
           

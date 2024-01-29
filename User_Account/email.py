@@ -7,20 +7,20 @@ email_from = settings.EMAIL_HOST_USER
 
 
 # Email for Recieved Orders
-def order_recieved(Queryset,email,tp):
-    subject = 'Order Recieved !!!'
-    intro="Thank You for shopping at Yyuimart.\n\nWe have recieved an order of:\n"
-    dic=""
-    i=0
-    for a in Queryset:
-        m=str(i+1)+") "+str(a.Brand) +" "+ str(a.PName)+"\nPrice: Rs. " + str(a.Price)+"/-\nQuantity:" + str(a.Quantity)+"\n\n"
-        i=i+1
-        dic=dic+m
+# def order_recieved(Queryset,email,tp):
+#     subject = 'Order Recieved !!!'
+#     intro="Thank You for shopping at Yyuimart.\n\nWe have recieved an order of:\n"
+#     dic=""
+#     i=0
+#     for a in Queryset:
+#         m=str(i+1)+") "+str(a.Brand) +" "+ str(a.PName)+"\nPrice: Rs. " + str(a.Price)+"/-\nQuantity:" + str(a.Quantity)+"\n\n"
+#         i=i+1
+#         dic=dic+m
         
-    message=intro+dic+"The total Price is Rs. "+str(tp)+"/- with shipping charges included."+"\n\nRegards Team Yyuimart "
+#     message=intro+dic+"The total Price is Rs. "+str(tp)+"/- with shipping charges included."+"\n\nRegards Team Yyuimart "
     
-    recipient_list = [email]
-    send_mail( subject, message, email_from, recipient_list )
+#     recipient_list = [email]
+#     send_mail( subject, message, email_from, recipient_list )
 
 # Email for OTP CONFIRMATION
 def email_otp(generated_otp,email,name):
@@ -77,3 +77,22 @@ def password_email(name,email):
     email.attach_alternative(html_content, "text/html")
     email.send()
     
+
+# Email for Recieved Order
+def order_recieved(Queryset,email,tp,name):
+    subject = 'Order Confirmed !!!'
+    from_email = settings.EMAIL_HOST_USER
+    to = [email]
+    data={
+        'Name':name,
+        'Company':settings.SITE_NAME,
+        'order_items':Queryset,
+        'total_amount':tp+100
+    }
+    # Load the HTML template
+    html_content = render_to_string('User_Account/order_email.html', {'data': data})
+    # Create the email body with both HTML and plain text versions
+    text_content = strip_tags(html_content)   
+    email = EmailMultiAlternatives(subject, text_content, from_email, to)
+    email.attach_alternative(html_content, "text/html")
+    email.send()

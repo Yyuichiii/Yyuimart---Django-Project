@@ -1,5 +1,4 @@
 .owl-carousel .item{
- /* border: 1px solid black; */
  font-size: 24px;
  text-align: center;
  margin-top: 20px;;
@@ -56,5 +55,105 @@
     color: black;
 }
 
+/* 
 
+
+/* Custom CSS */
+
+/* body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.navbar-brand,
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-item .nav-link {
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link { */
+    /* color: #920f0f; */
+/* } */
+
+/* .dropdown-menu .dropdown-item,
+.navbar-nav .nav-link.dropdown-toggle {
+    font-size: 16px;
+    /* font-weight: bold; */
+/* } */ 
+
+/* .form-control {
+    border-radius: 4px;
+}
+
+.btn-warning {
+    border-radius: 20px;
+    background-color: #ffc107;
+    border: none;
+    color: #000;
+}
+
+.footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer img {
+    width: 120px;
+}
+
+
+ */
+
+
+
+
+/* sdsfdkjls */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+    font-weight: bold;
+    color: #333; /* Dark color for links */
+}
+
+.navbar-toggler-icon {
+    background-color: #333; /* Dark color for toggler icon */
+}
+
+.dropdown-menu .dropdown-item,
+.navbar-nav .nav-link.dropdown-toggle {
+    font-size: 16px;
+}
+
+.navbar-nav .nav-link.active {
+    font-weight: bold;
+}
+
+.form-control {
+    border-radius: 10px;
+}
+
+.btn-warning {
+    border-radius: 20px;
+    background-color: #ffc107;
+    border: none;
+    color: #000;
+}
+
+.footer {
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer img {
+    width: 120px;
+}
 
