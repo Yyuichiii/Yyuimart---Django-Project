@@ -188,5 +188,7 @@ class PasswordChangeView(APIView):
                 # password_email(user.name,user.email)
                 return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
             else:
-                return Response({"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Incorrect old password."}, status=status.HTTP_406_NOT_ACCEPTABLE)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+

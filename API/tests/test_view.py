@@ -215,9 +215,14 @@ class TestUserProfileView(APITestCase):
         data = {'name': 'updated_name'}
         response = self.client.patch(url, data, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
         
-    #     # Check if the response is HTTP 200 OK
+        # Check if the response is HTTP 200 OK
         self.assertEqual(response.status_code, 200)
 
+
+        data_invalid={'Phone':"123435493esdj"}
+        response1 = self.client.patch(url, data=data_invalid, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        # Check if the response is HTTP_400_BAD_REQUEST
+        self.assertEqual(response1.status_code, 400)
 
 class TestUserAddressView(APITestCase):
 
@@ -275,21 +280,133 @@ class TestUserAddressView(APITestCase):
         
         response = self.client.post(url, data, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
         
-    #Check if the response is HTTP 201 Created
+        #Check if the response is HTTP 201 Created
         self.assertEqual(response.status_code, 201)
 
-    # if Address already exists
-
+        # Resoonse if Address already exists
         response1 = self.client.post(url, data=data, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
 
-        #Check if the response is HTTP_400_BAD_REQUEST
+        #Check if the response is HTTP_403_FORBIDDEN
         self.assertEqual(response1.status_code, 403)
 
-    # def test_put_user_address(self):
-    #     url = reverse('user_address')
-    #     data = {'address': 'Updated Address', 'city': 'Updated City', 'country': 'Updated Country'}
-    #     request = self.factory.put(url, data, format='json', HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
-    #     response = User_Address_View.as_view()(request)
+
+        # First get the address instance and then delete it
+        # Test to check when serializer validation occurs
+        address=user_address.objects.get(user=user)
+        address.delete()
+        data_invalid={
+        "Name":"test_Name",
+        "Phone":"123456789",
+        "Pincode":"123456",
+        "State":"Rajasthan",
+        "Road_name":"dsjktest"
+        }
+
+        response2=self.client.post(url,data=data_invalid ,format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+
+        #Check if the response is HTTP_400_BAD_REQUEST
+        self.assertEqual(response2.status_code, 400)
+
+    def test_put_user_address(self):
+        user=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="127845469",
+            password="t1234est#")
+        user.save()
+        # Create refresh and access tokens for the user
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        url = reverse('api_address')
+        update_data={
+        "Name":"Update_Name",
+        "Phone":"123456789",
+        "Pincode":"123456",
+        "State":"Rajasthan",
+        "house_no":"232dsdgfg",
+        "Road_name":"update_dsjktest"
+        }
+        address = user_address.objects.create(user=user,Name="John Doe",Phone="1234567890",Pincode="123456",State="California",house_no="123",Road_name="Main Street")
+        address.save()
+        response = self.client.put(url, data=update_data, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        #Check if the response is HTTP_200_OK
+        self.assertEqual(response.status_code, 200)
+
+
+        # Check when serializer is not valid error occurs
+        update_data_invalid={
+        "Name":"Update_Name",
+        "Phone":"123456789",
+        "State":"Rajasthan",
+        "house_no":"232dsdgfg",
+        "Road_name":"update_dsjktest"
+        }
+        response1 = self.client.put(url, data=update_data_invalid, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        #Check if the response is HTTP_400_BAD_REQUEST
+        self.assertEqual(response1.status_code, 400)
+
+        # Check when address_instance does not exists
+        address_instance=user_address.objects.get(user=user)
+        address_instance.delete()
+        response2 = self.client.put(url, data=update_data, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        #Check if the response is HTTP_404_NOT_FOUND
+        self.assertEqual(response2.status_code, 404)
+
+
+class PasswordChangeViewTest(APITestCase):
+    def test_change_password(self):
+        user=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="127845469",
+            password="t1234est#")
+        user.save()
+        # Create refresh and access tokens for the user
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        url = reverse('api_password_change')
+        data = {'old_password': 't1234est#', 'new_password1': 'new_password','new_password2': 'new_password'}
+        response = self.client.post(url, data=data, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        self.assertEqual(response.status_code, 200)
+    
+    def test_change_password_invalid(self):
+        # Check when post data is incorrect
+        user=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="127845469",
+            password="t1234est#")
+        user.save()
+        # Create refresh and access tokens for the user
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        url = reverse('api_password_change')
+        data = {'old_password': 't1234est#','new_password2': 'new_password'}
+        response = self.client.post(url, data=data, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        self.assertEqual(response.status_code, 400)
+
+        # Check when old_password is incorrect
+        data = {'old_password': 'incorect#','new_password1': 'new_password','new_password2': 'new_password'}
+        response1 = self.client.post(url, data=data, format='json', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        self.assertEqual(response1.status_code, 406)
+
+
+class RefreshTokenViewTest(APITestCase):
+    def test_refresh_token(self):
+        user=CustomUser.objects.create_user(email="test@gmail.com",name="test",Phone="127845469",
+            password="t1234est#")
+        user.save()
+        # Create refresh tokens for the user
+        refresh = RefreshToken.for_user(user)
+        data={
+            'refresh_token':str(refresh)
+        }
+        url=reverse('api_refreshtoken')
+        response=self.client.post(url,data=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('access_token', response.data)
+
+        # Test when refresh token is invalid
+        data_invalid={
+            'refresh_token':"invalid_token"
+        }
+        response1=self.client.post(url,data=data_invalid)
+        self.assertEqual(response1.status_code, 400)
         
-    #     # Check if the response is HTTP 200 OK
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # Test when refresh token is not provided
+        response2=self.client.post(url)
+        self.assertEqual(response2.status_code, 406)
+        
+
+        
