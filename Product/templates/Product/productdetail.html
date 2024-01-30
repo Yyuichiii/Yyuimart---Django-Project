@@ -3,99 +3,78 @@
 {% load mathfilters %}
 {% block title %}Product Detail{% endblock title %}
 {% block main-content %}
-<h1 id="message" class="success_1">The product has been added to the cart successfully !!! <span style="float:right"><a href=""><img src="{% static 'User_Account/images/cross.png' %}" class=""></a><span> </h1>
-<h1 id="message1" class="fail">LOGIN Required  !!! <span style="float:right"><a href=""><img src="{% static 'User_Account/images/cross.png' %}" class=""></a><span> </h1>
-<div class="container my-5">
- <div class="row">
-  <div class="col-sm-6 text-center align-self-center">
-   <img src="{{Product.PImage.}}" alt="Images here" class="img-fluid img-thumbnail">
-  </div>
-  <div class="col-sm-5 offset-sm-1">
-   <h2>{{Product.Brand}} {{Product.PName}}</h2>
-   <hr>
-   <p>{{Product.Description}}</p> <br>
-   <h4>Rs. {{Product.Price}} <small class="fw-light text-decoration-line-through">{{ Product.Price|addition:1200 }}
-</small></h4> <br>
+<style>
+    /* Custom CSS for responsiveness and button positioning */
+    .product-details-container {
+        padding-top: 50px; /* Adjust top padding for better spacing */
+    }
+    .product-image-container {
+        margin-bottom: 20px; /* Add margin at the bottom for better spacing */
+    }
+    .product-description-container {
+        padding-left: 15px; /* Adjust padding for better alignment */
+    }
+    .button-container {
+        margin-top: 20px; /* Add margin at the top for better spacing */
+    }
+</style>
 
-  <button id="cart" class="btn btn-primary shadow px-5 py-2" >Add to Cart</button>
-  
-   <a href="{% url "Buy_now" Product.PID %}" id="buy_now_button" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a>
-   <h5 class="mt-5">Available Offers</h5>
-   <ul>
-    <li>Bank Offer 5% Unlimited Cashback on Flipkart Axis Bank Credit</li>
-    <li>Special Price Get extra ₹3000 off (price inclusive of discount)</li>
-    <li>No cost EMI ₹1,667/month. Standard EMI also available</li>
-    <li>Partner Offer ₹2000 Flipkart Gift Card on Every 1000th Transaction with a new Visa Debit/Credit Card</li>
-   </ul>
-  </div>
- </div>
+<h1 id="message" class="success_1">The product has been added to the cart successfully !!! 
+    <span style="float:right"><a href=""><img src="{% static 'User_Account/images/cross.png' %}" class=""></a><span> 
+</h1>
+<h1 id="message1" class="fail">LOGIN Required  !!! 
+    <span style="float:right"><a href=""><img src="{% static 'User_Account/images/cross.png' %}" class=""></a><span> 
+</h1>
+
+<div class="container my-5 product-details-container">
+    <div class="row">
+        <div class="col-sm-6 text-center align-self-center product-image-container">
+            <img src="{{Product.PImage.url}}" alt="Images here" class="img-fluid img-thumbnail">
+        </div>
+        <div class="col-sm-5 offset-sm-1 product-description-container">
+            <h2>{{Product.Brand}} {{Product.PName}}</h2>
+            <hr>
+            <p>{{Product.Description}}</p>
+            <h4>Rs. {{Product.Price}} 
+                <small class="fw-light text-decoration-line-through">{{ Product.Price|addition:1200 }}</small>
+            </h4>
+
+            <div class="button-container">
+                <button id="cart" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
+                <a href="{% url "Buy_now" Product.PID %}" id="buy_now_button" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a>
+            </div>
+            
+            <h5 class="mt-5">Available Offers</h5>
+            <ul>
+                <li>Bank Offer 5% Unlimited Cashback on Flipkart Axis Bank Credit</li>
+                <li>Special Price Get extra ₹3000 off (price inclusive of discount)</li>
+                <li>No cost EMI ₹1,667/month. Standard EMI also available</li>
+                <li>Partner Offer ₹2000 Flipkart Gift Card on Every 1000th Transaction with a new Visa Debit/Credit Card</li>
+            </ul>
+        </div>
+    </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
- 
+    $('#cart').click(function(){
+        $.ajax({
+            type:'GET',
+            url: '/products/addcart',
+            data:{
+                id:"{{Product.PID}}",
+            },
+            success: function(response) {
+                $('#message').css({"display": "block"});
+                $('#cart_no').html(response.cart_no);
+            },
+            error: function(response) {
+                console.log("I failed");
+                $('#message1').css({"display": "block"});
+            }
+        });
+    });
+</script>
+{% endblock main-content %}
 
 
-   $('#cart').click(function(){
-      $.ajax({
-         type:'GET',
-         url: '/products/addcart',
-         data:{
-            id:"{{Product.PID}}",
-            
-         },
-         
-         success: function(response) {
-            
-            $('#message').css({"display": "block"});
-            $('#cart_no').html(response.cart_no);
-         },
 
-         error: function(response) {
-            
-            console.log("I failed");
-            $('#message1').css({"display": "block"});
-           
-           
-         }
-         
-         
-      });
-  
-    })
-
-
-    
-  
-   
-    
-    
-    
-   </script>
-   {% endblock main-content %}
