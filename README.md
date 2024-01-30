@@ -4,14 +4,14 @@
 Welcome to our E-commerce website built with Django! This repository contains the source code for our online store where users can browse and purchase products, manage their profiles, and perform various account-related actions. Additionally, the website provides API endpoints for seamless integration with external applications.
 
 ## Features
-User Authentication: Users can create accounts, login, logout, and update their profiles securely. Simple JWT (JSON Web Tokens) is used for authentication, ensuring secure access to user accounts.
-OTP Verification: Users undergo OTP (One-Time Password) verification during account creation and certain sensitive operations for enhanced security.
-Email Services: The website integrates email services to send OTP verification codes, password change reminders, and order summary emails.
-Product Management: Browse products, view detailed descriptions, and add items to the cart for purchase.
-Shopping Cart: Users can add products to their cart, update quantities, and proceed to checkout.
-Order Management: Place orders, view order history, and track shipment status.
-API Endpoints: Includes endpoints for user profile creation, login, change password, add address, and more, facilitating seamless integration with other applications.
-Responsive Design: The website is optimized for various devices, providing a consistent user experience across desktop and mobile platforms.
+-User Authentication: Users can create accounts, login, logout, and update their profiles securely. Simple JWT (JSON Web Tokens) is used for authentication, ensuring secure access to user accounts.
+-OTP Verification: Users undergo OTP (One-Time Password) verification during account creation and certain sensitive operations for enhanced security.
+-Email Services: The website integrates email services to send OTP verification codes, password change reminders, and order summary emails.
+-Product Management: Browse products, view detailed descriptions, and add items to the cart for purchase.
+-Shopping Cart: Users can add products to their cart, update quantities, and proceed to checkout.
+-Order Management: Place orders, view order history, and track shipment status.
+-API Endpoints: Includes endpoints for user profile creation, login, change password, add address, and more, facilitating seamless integration with other applications.
+-Responsive Design: The website is optimized for various devices, providing a consistent user experience across desktop and mobile platforms.
 
 ## Setup
 To run the project locally, follow these steps:
