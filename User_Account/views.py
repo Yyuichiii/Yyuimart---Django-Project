@@ -13,6 +13,8 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from User_Account.utils import generateOTP
+from django.core.paginator import Paginator
+
 
 
 # Function to logout admin before visiting the webpages
@@ -300,12 +302,16 @@ def success(request):
     return redirect("home")
 
 
-# Note- Implement Pagination and make it render fast
 # Orders Section
 def orders(request):
     if not(request.user.is_authenticated):
         return redirect('home')
     
     obj=Order.objects.filter(user=request.user).order_by('-id')
+
+    paginator = Paginator(obj, 5)  # Show 10 orders per page.
+
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "User_Account/orders.html", {"Products": page_obj})
     
-    return render(request,"User_Account/orders.html",{'Products':obj})
