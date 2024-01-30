@@ -28,7 +28,7 @@
             <a href="{% url 'Product_Details' t.PID %}" class="btn">
                 <div class="item-container">
                     <div class="item">
-                        <img data-src="{{t.PImage.url}}" alt="Images render here">
+                        <img class="lazy-load" data-src="{{t.PImage.url}}" alt="Images render here">
                         <noscript><img src="{{t.PImage.url}}" alt="Images render here"></noscript>
                         <br>
                         <span class="fw-bold">{{t}}<br></span>
@@ -43,31 +43,24 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        var lazyImages = [].slice.call(document.querySelectorAll("img[data-src]"));
-
+        var lazyImages = [].slice.call(document.querySelectorAll(".lazy-load"));
+        
         if ("IntersectionObserver" in window) {
             let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
                 entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
                         let lazyImage = entry.target;
                         lazyImage.src = lazyImage.dataset.src;
-                        lazyImage.removeAttribute("data-src");
+                        lazyImage.classList.remove("lazy-load");
                         lazyImageObserver.unobserve(lazyImage);
                     }
                 });
             });
-
+    
             lazyImages.forEach(function(lazyImage) {
                 lazyImageObserver.observe(lazyImage);
-            });
-        } else {
-            // Fallback for browsers that do not support IntersectionObserver
-            lazyImages.forEach(function(lazyImage) {
-                lazyImage.src = lazyImage.dataset.src;
-                lazyImage.removeAttribute("data-src");
             });
         }
     });
 </script>
 {% endblock main-content %}
-

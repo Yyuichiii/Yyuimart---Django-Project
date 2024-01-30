@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-&rfn4wux3rx-7e(#z@0(o8hxoj!44-_x+&-+9d%zia#5x)g06!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.3']
+ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "User_Account.CustomUser"     #Registration of Custom User in Settings,py
 # Application definition
@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
     'Product',
     'API',
     "phonenumber_field",

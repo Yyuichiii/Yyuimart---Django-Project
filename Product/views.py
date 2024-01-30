@@ -53,6 +53,7 @@ def product_details(request,pid):
         return HttpResponseNotFound("Product not found.")
 
 
+
 class Common_Cart_BuyNow:
     def add_to_cart(self, request, product_model, pid):
         # Retrieve product details
