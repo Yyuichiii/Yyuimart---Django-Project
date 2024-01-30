@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
-from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
 from .managers import CustomUserManager
 
 # Custom validator for Phone number field
@@ -56,7 +55,7 @@ class User_cart(models.Model):
 
 class Order(models.Model):
     user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    Order_time=models.DateTimeField()
+    Order_time=models.DateTimeField(auto_now_add=True)
     PID=models.CharField(max_length=5,null=True)
     Category=models.CharField(max_length=15,null=True)
     Brand=models.CharField(max_length=15,null=True)

@@ -20,3 +20,15 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+# For making the testCase fast , we can implement this setting
+# if __name__ == "__main__":
+    
+#     # Use 'test_settings' as the DJANGO_SETTINGS_MODULE for tests
+    # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Yyuimart.test_settings")
+
+    # from django.core.management import execute_from_command_line
+
+    # execute_from_command_line(sys.argv)

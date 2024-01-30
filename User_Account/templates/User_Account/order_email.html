@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 0;
+        }
+        p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+        }
+        .highlight {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ff5733; /* Highlight color */
+        }
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            img {
+                max-width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Confirmation</h1>
+        <p>Dear {{ data.Name }},</p>
+        <p>Thank you for your order! Below are the details:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data.order_items %}
+                <tr>
+                    <td>{{ item.Brand }} {{ item.PName }}</td>
+                    <td>{{ item.Category }}</td>
+                    <td>{{ item.Quantity }}</td>
+                    <td>Rs. {{ item.Price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="highlight">Total amount: Rs. {{ data.total_amount }} with shipping charges included!</p>
+        <p>Thank you for shopping with us!</p>
+        <p class="footer">Sincerely, {{ data.Company }}</p>
+    </div>
+</body>
+</html>

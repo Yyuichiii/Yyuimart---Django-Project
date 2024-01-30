@@ -2,16 +2,72 @@
 {% load static %}
 {% block title %}Buy Now{% endblock title %}
 {% block main-content %}
+<style>
+    .item-container {
+        width: 100%; /* Adjust width to fit within container */
+        max-width: 380px; /* Set maximum width for each item */
+        height: auto; /* Allow height to adjust based on content */
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
+    .item {
+        text-align: center;
+        padding: 10px; /* Add padding for better appearance */
+    }
+    .item img {
+        max-width: 100%; /* Ensure image fits within its container */
+        height: auto; /* Allow height to adjust based on width */
+        display: block;
+        margin: 0 auto;
+    }
+</style>
 <div class="container my-5">
- <div class="row">
-  <div class="col-sm-3">
-   Side Bar for Mobile filter
-  </div>
-  <div class="col-sm-8 offset-sm-1">
-   {% for t in P %}
-   <a href="{% url 'Product_Details' t.PID %}" class="btn"><div class="item"><img src="{{t.PImage.}}" alt="Images render here" height="400px" width="380px"><br><span class="fw-bold">{{t}}<br></span><span class="fs-5">&#8377 {{t.Price}}/-</span></div></a>
-   {% endfor %}
-  </div>
- </div>
+    <div class="row">
+        {% for t in P %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <a href="{% url 'Product_Details' t.PID %}" class="btn">
+                <div class="item-container">
+                    <div class="item">
+                        <img data-src="{{t.PImage.url}}" alt="Images render here">
+                        <noscript><img src="{{t.PImage.url}}" alt="Images render here"></noscript>
+                        <br>
+                        <span class="fw-bold">{{t}}<br></span>
+                        <span class="fs-5">&#8377;{{t.Price}}/-</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var lazyImages = [].slice.call(document.querySelectorAll("img[data-src]"));
+
+        if ("IntersectionObserver" in window) {
+            let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        let lazyImage = entry.target;
+                        lazyImage.src = lazyImage.dataset.src;
+                        lazyImage.removeAttribute("data-src");
+                        lazyImageObserver.unobserve(lazyImage);
+                    }
+                });
+            });
+
+            lazyImages.forEach(function(lazyImage) {
+                lazyImageObserver.observe(lazyImage);
+            });
+        } else {
+            // Fallback for browsers that do not support IntersectionObserver
+            lazyImages.forEach(function(lazyImage) {
+                lazyImage.src = lazyImage.dataset.src;
+                lazyImage.removeAttribute("data-src");
+            });
+        }
+    });
+</script>
 {% endblock main-content %}
+
