@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('User_Account.urls')),
     path('products/', include('Product.urls')),
     path('api/', include('API.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

@@ -294,6 +294,27 @@ def success(request):
         tp=tp+o.Price
         Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,PImage=o.PImage)
         
+    # total_price = 0
+    # user_cart_objects = User_cart.objects.filter(user=request.user)
+
+    # order_objects = []
+    # for cart_object in user_cart_objects:
+    #     total_price += cart_object.Price
+    #     order_objects.append(Order(
+    #         user=request.user,
+    #         PID=cart_object.PID,
+    #         Category=cart_object.Category,
+    #         Brand=cart_object.Brand,
+    #         PName=cart_object.PName,
+    #         Price=cart_object.Price,
+    #         Quantity=cart_object.Quantity,
+    #         PImage=cart_object.PImage
+    #     ))
+
+    # with transaction.atomic():
+    #     Order.objects.bulk_create(order_objects)
+
+
 # Email Service temporarily Stopped    
     print(request.user.name)
     order_recieved(obj,request.user,tp,request.user.name)
@@ -308,8 +329,9 @@ def orders(request):
         return redirect('home')
     
     obj=Order.objects.filter(user=request.user).order_by('-id')
+    
 
-    paginator = Paginator(obj, 5)  # Show 10 orders per page.
+    paginator = Paginator(obj, 5)  # Show 5 orders per page.
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
