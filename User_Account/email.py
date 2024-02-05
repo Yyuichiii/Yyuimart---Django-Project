@@ -1,9 +1,11 @@
 from django.conf import settings
+from celery import shared_task
 from django.core.mail import send_mail,EmailMessage,EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 email_from = settings.EMAIL_HOST_USER
+# celery -A Yyuimart  worker -l INFO
 
 
 # Email for OTP CONFIRMATION
@@ -27,6 +29,7 @@ def email_otp(generated_otp,email,name):
 
 
 # Email for successful Registration
+@shared_task
 def email_success_register(email,name):
     subject = 'OTP Verification on '+settings.SITE_NAME
     from_email = settings.EMAIL_HOST_USER
@@ -45,6 +48,7 @@ def email_success_register(email,name):
 
 
 # Email for Password Change
+@shared_task    
 def password_email(name,email):
     subject = 'Password Changed !!!'
     from_email = settings.EMAIL_HOST_USER
@@ -63,6 +67,7 @@ def password_email(name,email):
     
 
 # Email for Recieved Order
+# @shared_task
 def order_recieved(Queryset,email,tp,name):
     subject = 'Order Confirmed !!!'
     from_email = settings.EMAIL_HOST_USER

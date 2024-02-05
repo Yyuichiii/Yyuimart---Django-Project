@@ -81,7 +81,7 @@ def otpfun(request,uid,token):
                     inactive_user.is_active=True
                     inactive_user.save()
                     # This email services can be delay and will not impact on the other services
-                    email_success_register(inactive_user.email,inactive_user.name)
+                    email_success_register.delay(inactive_user.email,inactive_user.name)
                     request.session.flush()
                     messages.success(request, "Account has been successfully created !!!")
 
@@ -150,7 +150,7 @@ def password_change(request):
         if fm.is_valid():
             user = fm.save()
             update_session_auth_hash(request, user)  # To keep the user logged in
-            password_email(user.name,user.email)  # For activating the email service
+            password_email.delay(user.name,user.email)  # For activating the email service
             messages.success(request, "Password is changed Successfully !!!")
             return redirect('home')
     return render(request,'User_Account/changepassword.html',{'form':fm})
@@ -290,9 +290,22 @@ def success(request):
     
     tp=0
     obj=User_cart.objects.filter(user=request.user)
+    # data_list = []
     for o in obj:
         tp=tp+o.Price
         Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,PImage=o.PImage)
+
+    #     data_list.append({
+    #     'PID': o.PID,
+    #     'Category': o.Category,
+    #     'Brand': o.Brand,
+    #     'PName': o.PName,
+    #     'Price': o.Price,
+    #     'Quantity': o.Quantity,
+    #     'PImage': o.PImage.url,  # Assuming PImage is a FileField
+    # })
+        
+    # print(data_list)
         
     # total_price = 0
     # user_cart_objects = User_cart.objects.filter(user=request.user)
@@ -316,7 +329,7 @@ def success(request):
 
 
 # Email Service temporarily Stopped    
-    print(request.user.name)
+    
     order_recieved(obj,request.user,tp,request.user.name)
     obj.delete()
     messages.success(request,"Order has been Successfully Recevied ")

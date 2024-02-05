@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     'User_Account',
     'mathfilters',
+    'celery'
 ]
 
 MIDDLEWARE = [
@@ -170,3 +171,10 @@ INTERNAL_IPS = [
     "127.0.0.1",
     # ...
 ]
+
+
+# Celery Setting
+CELERY_TIMEZONE = "Asia/Kolkata"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL="redis://127.0.0.1:6379/0"

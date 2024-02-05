@@ -6,12 +6,70 @@ Welcome to our E-commerce website built with Django! This repository contains th
 ## Features
 - **User Authentication**: Users can create accounts, login, logout, and update their profiles securely. Simple JWT (JSON Web Tokens) is used for authentication, ensuring secure access to user accounts.
 - **OTP Verification**: Users undergo OTP (One-Time Password) verification during account creation and certain sensitive operations for enhanced security.
-- **Email Services**: The website integrates email services to send OTP verification codes, password change reminders, and order summary emails.
+- **Email Services with Celery**: The website integrates email services using Celery, a distributed task queue, to send OTP verification codes, password change reminders. Celery ensures efficient and asynchronous processing of email tasks, improving system performance.
 - **Product Management**: Browse products, view detailed descriptions, and add items to the cart for purchase.
 - **Shopping Cart**: Users can add products to their cart, update quantities, and proceed to checkout.
 - **Order Management**: Place orders, view order history, and track shipment status.
 - **API Endpoints**: Includes endpoints for user profile creation, login, change password, add address, and more, facilitating seamless integration with other applications.
 - **Responsive Design**: The website is optimized for various devices, providing a consistent user experience across desktop and mobile platforms.
+
+
+```markdown
+# Project Setup Instructions
+
+Follow these steps to set up and run the project on your local machine:
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/your-repository.git
+cd your-repository
+```
+
+### 2. Install Dependencies
+
+Install the required dependencies listed in `requirements.txt` using the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure Database Settings
+
+Update the database settings in `settings.py` according to your database configuration.
+
+### 4. Run Database Migrations
+
+Run the database migrations to initialize the database schema:
+
+```bash
+python manage.py migrate
+```
+
+### 5. Start the Development Server
+
+Start the development server to run the application:
+
+```bash
+python manage.py runserver
+```
+
+### 6. Start Celery Worker
+
+Open another terminal and start Celery worker for handling background tasks:
+
+```bash
+celery -A your_project_name worker -l INFO
+```
+
+Replace `your_project_name` with the actual name of your Django project.
+
+Now, your Django project is up and running! Visit `http://localhost:8000` in your web browser to access the application.
+
+Feel free to customize the instructions based on your specific project details and naming conventions.
+```
+
+You can copy and paste this markdown code into your GitHub README.md file.
 
 ## Setup
 To run the project locally, follow these steps:
