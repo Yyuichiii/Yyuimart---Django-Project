@@ -14,7 +14,7 @@ Welcome to our E-commerce website built with Django! This repository contains th
 - **Responsive Design**: The website is optimized for various devices, providing a consistent user experience across desktop and mobile platforms.
 
 
-```markdown
+
 # Project Setup Instructions
 
 Follow these steps to set up and run the project on your local machine:
@@ -22,7 +22,7 @@ Follow these steps to set up and run the project on your local machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
+git clone https://github.com/Yyuimart/your-repository.git
 cd your-repository
 ```
 
@@ -59,25 +59,13 @@ python manage.py runserver
 Open another terminal and start Celery worker for handling background tasks:
 
 ```bash
-celery -A your_project_name worker -l INFO
+celery -A Yyuimart worker -l INFO
 ```
-
-Replace `your_project_name` with the actual name of your Django project.
 
 Now, your Django project is up and running! Visit `http://localhost:8000` in your web browser to access the application.
 
 Feel free to customize the instructions based on your specific project details and naming conventions.
-```
 
-You can copy and paste this markdown code into your GitHub README.md file.
-
-## Setup
-To run the project locally, follow these steps:
-1. Clone the repository to your local machine.
-2. Install the required dependencies listed in `requirements.txt`.
-3. Configure the database settings in `settings.py`.
-4. Run database migrations using `python manage.py migrate`.
-5. Start the development server with `python manage.py runserver`.
 
 ## API Documentation
 The API provides endpoints for the following operations:
@@ -96,6 +84,7 @@ The API provides endpoints for the following operations:
 - JavaScript: Client-side scripting for dynamic behavior.
 - SQLite: Databases for storing user and product information.
 - Email Services: Integration with email services for sending OTP codes, password change reminders, and order summary emails.
+- Django Celery And Redis
 
 ## Contributors
 - [Ritik Mehra](https://github.com/Yyuichiii)
