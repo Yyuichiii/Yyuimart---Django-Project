@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import user_address,CustomUser,User_cart,Order
+from .models import user_address,CustomUser,Cart
 from django.urls import reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form,otp_form
@@ -14,6 +14,9 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from User_Account.utils import generateOTP
 from django.core.paginator import Paginator
+from django.contrib.contenttypes.models import ContentType
+
+
 
 
 
@@ -26,8 +29,9 @@ def admin_logout(request):
 # Home
 def home(request): 
     admin_logout(request)   #Function to logout the admin   
-    product=Women.objects.all()   #Women Product Queryset   
-    return render(request,'User_Account/home.html',{'product':product})
+    product=Women.objects.all()   #Women Product Queryset 
+    type=ContentType.objects.get_for_model(Women)  
+    return render(request,'User_Account/home.html',{'product':product,'type':type})
 
 # Registration
 def registration(request):
@@ -198,36 +202,36 @@ class address(View):
 # User Cart
 def cart_fun(request):   
     
-    o=User_cart.objects.filter(user=request.user)
+    o=Cart.objects.filter(user=request.user)
     if not o.exists():
         messages.success(request,"Cart is Empty Please add Something first ")
         return redirect('home')
     else:
+        total_price=0
+        for item in o:
+            total_price=total_price+item.Quantity*item.content_object.Price
 
-        tp=0
-        for a in o:
-            tp=tp+a.Price
+        
 
-
-        return render(request,"User_Account/cart.html",{'Products':o,'Total_Price':tp})
+        return render(request,"User_Account/cart.html",{'Products':o,'total_price':total_price})
 
 
 # Function to delete the cart item
 def delete(request,i):
-    obj=User_cart.objects.get(id=i)
+    obj=Cart.objects.get(pk=i)
     obj.delete()
     messages.success(request,"The selected Item has delete successfully")
     return redirect('cart')
 
 # Function to add the quantity of the product
 def add(request,i):
-    obj=User_cart.objects.get(id=i)
-    update=obj.Quantity+1
+    obj=Cart.objects.get(pk=i)
+    obj.Quantity=obj.Quantity+1
 
-    price=obj.Price/obj.Quantity
+    # price=obj.Price/obj.Quantity
     
-    obj.Quantity=update
-    obj.Price=price*update
+    # obj.Quantity=update
+    # obj.Price=price*update
     obj.save()
     
     messages.success(request,"The Quantity of the selected Item has been added successfully")
@@ -236,15 +240,10 @@ def add(request,i):
 # Function to reduce the quantity of the product
 def reducee(request,i):
     
-    obj=User_cart.objects.get(id=i)
+    obj=Cart.objects.get(id=i)
     if obj.Quantity==1:
         return redirect('delete',i)
-    update=obj.Quantity-1
-
-    price=obj.Price/obj.Quantity
-
-    obj.Quantity=update
-    obj.Price=price*update
+    obj.Quantity=obj.Quantity-1
     obj.save()
 
     messages.success(request,"The Quantity of the selected Item has been reduced successfully")
@@ -255,7 +254,7 @@ def checkout(request):
     referer = request.META.get('HTTP_REFERER')
     if referer is None:
         return redirect('home')
-    o=User_cart.objects.filter(user=request.user)
+    o=Cart.objects.filter(user=request.user)
     if not o.exists():
         return redirect('home')
     obj=user_address.objects.filter(user=request.user)
@@ -263,12 +262,11 @@ def checkout(request):
     if not obj.exists():
         m="Address is Not Set"
 
-    tp=0
-    for a in o:
-        tp=tp+a.Price
+    total_price=0
+    for item in o:
+        total_price=total_price+item.Quantity*item.content_object.Price
 
-    tp=tp+100       #Added Shipping Charges
-    return render(request,"User_Account/checkout.html",{'Address':obj,'m':m,'tp':tp,"product":o})
+    return render(request,"User_Account/checkout.html",{'Address':obj,'m':m,'tp':total_price,"product":o})
 
 
 # Class based view for edit address in checkout
@@ -284,16 +282,17 @@ class edit_address(address):
 
 # Order Placed Showed but orders are not saving and cart is deleting 
 def success(request):
-    referer = request.META.get('HTTP_REFERER')
-    if referer is None:
-        return redirect('home')
+    pass
+    # referer = request.META.get('HTTP_REFERER')
+    # if referer is None:
+    #     return redirect('home')R
     
-    tp=0
-    obj=User_cart.objects.filter(user=request.user)
-    # data_list = []
-    for o in obj:
-        tp=tp+o.Price
-        Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,PImage=o.PImage)
+    # tp=0
+    # # obj=User_cart.objects.filter(user=request.user)
+    # # data_list = []
+    # for o in obj:
+    #     tp=tp+o.Price
+    #     Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,PImage=o.PImage)
 
     #     data_list.append({
     #     'PID': o.PID,
@@ -330,23 +329,23 @@ def success(request):
 
 # Email Service temporarily Stopped    
     
-    order_recieved(obj,request.user,tp,request.user.name)
-    obj.delete()
-    messages.success(request,"Order has been Successfully Recevied ")
-    return redirect("home")
+    # order_recieved(obj,request.user,tp,request.user.name)
+    # obj.delete()
+    # messages.success(request,"Order has been Successfully Recevied ")
+    # return redirect("home")
 
 
 # Orders Section
-def orders(request):
-    if not(request.user.is_authenticated):
-        return redirect('home')
+# def orders(request):
+#     if not(request.user.is_authenticated):
+#         return redirect('home')
     
-    obj=Order.objects.filter(user=request.user).order_by('-id')
+#     obj=Order.objects.filter(user=request.user).order_by('-id')
     
 
-    paginator = Paginator(obj, 5)  # Show 5 orders per page.
+#     paginator = Paginator(obj, 5)  # Show 5 orders per page.
 
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-    return render(request, "User_Account/orders.html", {"Products": page_obj})
+#     page_number = request.GET.get("page")
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, "User_Account/orders.html", {"Products": page_obj})
     

@@ -35,7 +35,9 @@ INSTALLED_APPS = [
     "phonenumber_field",
     'User_Account',
     'mathfilters',
-    'celery'
+    'celery',
+    'django_extensions',
+
 ]
 
 MIDDLEWARE = [

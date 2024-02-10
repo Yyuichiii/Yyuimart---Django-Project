@@ -25,7 +25,7 @@
 <h1 id="message1" class="fail">LOGIN Required  !!! 
     <span style="float:right"><a href=""><img src="{% static 'User_Account/images/cross.png' %}" class=""></a><span> 
 </h1>
-
+{% csrf_token %}
 <div class="container my-5 product-details-container">
     <div class="row">
         <div class="col-sm-6 text-center align-self-center product-image-container">
@@ -41,7 +41,7 @@
 
             <div class="button-container">
                 <button id="cart" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
-                <a href="{% url "Buy_now" Product.PID %}" id="buy_now_button" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a>
+                {% comment %} <a href="{% url "Buy_now" Product.PID %}" id="buy_now_button" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a> {% endcomment %}
             </div>
             
             <h5 class="mt-5">Available Offers</h5>
@@ -57,18 +57,22 @@
 
 <script>
     $('#cart').click(function(){
+        // Get CSRF token
+        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    
         $.ajax({
-            type:'GET',
-            url: '/products/addcart',
-            data:{
-                id:"{{Product.PID}}",
+            type: 'POST',  // Change request type to POST
+            url: '/products/Add_cart',
+            data: {
+                csrfmiddlewaretoken: csrftoken,  // Include CSRF token in data
+                id: "{{ Product.PID }}",
+                tid: "{{ type.pk }}"
             },
             success: function(response) {
                 $('#message').css({"display": "block"});
                 $('#cart_no').html(response.cart_no);
             },
             error: function(response) {
-                console.log("I failed");
                 $('#message1').css({"display": "block"});
             }
         });

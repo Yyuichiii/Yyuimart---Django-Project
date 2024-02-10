@@ -1,11 +1,13 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse,JsonResponse,HttpResponseNotFound
+from django.shortcuts import render
+from django.http import JsonResponse,HttpResponseNotFound
 from .models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
-from User_Account.models import User_cart
+from User_Account.models import Cart
 from django.contrib import messages
-from django.views import View
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
+
 
 def category(request, c):
     category_model_mapping = {
@@ -20,131 +22,45 @@ def category(request, c):
     # Check if the category is valid
     if c in category_model_mapping:
         category_model = category_model_mapping[c]
+        type=ContentType.objects.get_for_model(category_model)
         all_products = category_model.objects.all()
+        return render(request, 'Product/categories.html', {'P': all_products,'type':type})
+
     else:
         # Handle invalid category here
         all_products = []
 
     return render(request, 'Product/categories.html', {'P': all_products})
 
-def product_details(request,pid): 
+
+def product_detail(request,tid,pid):
     try:
-        if pid.startswith('M'):
-            if pid.startswith('MF'):
-                p=Men.objects.get(PID=pid)
-            else:
-                p=Mobile.objects.get(PID=pid)
-
-        if pid.startswith('L'):
-            p=Laptop.objects.get(PID=pid)
-
-        if pid.startswith('H'):
-            p=HeadPhone.objects.get(PID=pid)
-
-        if pid.startswith('W'):
-            p=Women.objects.get(PID=pid)
-
-        if pid.startswith('S'):
-            p=Shoe.objects.get(PID=pid)
-    
-        return render(request,'Product/productdetail.html',{'Product':p})
-    
+        type=ContentType.objects.get_for_id(tid)
+        p=type.get_object_for_this_type(PID=pid)
+        return render(request,'Product/productdetail.html',{'Product':p,'type':type})
     except:
         return HttpResponseNotFound("Product not found.")
 
-
-
-class Common_Cart_BuyNow:
-    def add_to_cart(self, request, product_model, pid):
-        # Retrieve product details
-        product = product_model.objects.get(PID=pid)
-        # Check if the product is already in the user's cart
-        cart_item = User_cart.objects.filter(user=request.user, PID=pid).first()
-
-        if cart_item:
-            # If the product is already in the cart, update quantity and price
-            cart_item.Quantity += 1
-            cart_item.Price += product.Price
-            cart_item.save()
+@login_required
+def add_to_cart(request):
+    try:
+        pid = request.POST.get("id")
+        tid = request.POST.get("tid")
+        if Cart.objects.filter(PID=pid ,user=request.user).exists():
+            cart_obj=Cart.objects.get(PID=pid,user=request.user)
+            cart_obj.Quantity=cart_obj.Quantity+1
+            cart_obj.save()
         else:
-            # If the product is not in the cart, create a new cart item
-            User_cart.objects.create(
+            content_type=ContentType.objects.get_for_id(tid)
+            cart=Cart.objects.create(
                 user=request.user,
-                Quantity=1,
-                Brand=product.Brand,
-                PName=product.PName,
-                Price=product.Price,
+                content_type=content_type,
                 PID=pid,
-                Category=product.__class__.__name__,
-                PImage=product.PImage
             )
+            cart.save()
 
-        return
+        c=Cart.objects.filter(user=request.user).aggregate(cart_no=Sum('Quantity'))
+        return JsonResponse({'cart_no': c['cart_no']})
     
-@method_decorator(login_required, name='dispatch')
-class add_cart_class(Common_Cart_BuyNow, View):
-    def get(self, request):
-        pid = request.GET.get("id")
-
-        # Check if the product is a Mobile
-        if Mobile.objects.filter(PID=pid).exists():
-            product_model = Mobile
-        # Check if the product is a Laptop
-        elif Laptop.objects.filter(PID=pid).exists():
-            product_model = Laptop
-        # Check if the product is a HeadPhone
-        elif HeadPhone.objects.filter(PID=pid).exists():
-            product_model = HeadPhone
-        # Check if the product is a Men's product
-        elif Men.objects.filter(PID=pid).exists():
-            product_model = Men
-        # Check if the product is a Women's product
-        elif Women.objects.filter(PID=pid).exists():
-            product_model = Women
-        # Check if the product is a Shoe
-        elif Shoe.objects.filter(PID=pid).exists():
-            product_model = Shoe
-        else:
-            # Product not found
-            return JsonResponse({'cart_no': 0})
-
-        # Add product to cart and get total items
-        self.add_to_cart(request, product_model, pid)
-        
-        # Calculate total items in the cart
-        c1=0
-        obj=User_cart.objects.filter(user=request.user)
-        for o in obj:
-            c1=c1+o.Quantity
-
-        return JsonResponse({'cart_no': c1})
-    
-
-class buy_now(Common_Cart_BuyNow,View):
-    def get(self, request, pid):
-        if(not request.user.is_authenticated):
-            messages.error(request, "Login to continue... !!!")
-            return redirect(request.META.get('HTTP_REFERER'))
-        
-        # Check if the product is a Mobile
-        if Mobile.objects.filter(PID=pid).exists():
-            product_model = Mobile
-        # Check if the product is a Laptop
-        elif Laptop.objects.filter(PID=pid).exists():
-            product_model = Laptop
-        # Check if the product is a HeadPhone
-        elif HeadPhone.objects.filter(PID=pid).exists():
-            product_model = HeadPhone
-        # Check if the product is a Men's product
-        elif Men.objects.filter(PID=pid).exists():
-            product_model = Men
-        # Check if the product is a Women's product
-        elif Women.objects.filter(PID=pid).exists():
-            product_model = Women
-        # Check if the product is a Shoe
-        elif Shoe.objects.filter(PID=pid).exists():
-            product_model = Shoe
-
-        self.add_to_cart(request, product_model, pid)
-    
-        return redirect("checkout")
+    except:
+        return HttpResponseNotFound("Login First")

@@ -25,7 +25,7 @@
     <div class="row">
         {% for t in P %}
         <div class="col-lg-3 col-md-4 col-sm-6">
-            <a href="{% url 'Product_Details' t.PID %}" class="btn">
+            <a href="{% url 'Product_Details' type.pk t.PID  %}" class="btn">
                 <div class="item-container">
                     <div class="item">
                         <img class="lazy-load" data-src="{{t.PImage.url}}" alt="Images render here">
@@ -33,6 +33,7 @@
                         <br>
                         <span class="fw-bold">{{t}}<br></span>
                         <span class="fs-5">&#8377;{{t.Price}}/-</span>
+                        
                     </div>
                 </div>
             </a>

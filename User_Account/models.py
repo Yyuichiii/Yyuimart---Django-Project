@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 from .managers import CustomUserManager
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Custom validator for Phone number field
 class val(RegexValidator):
@@ -39,30 +41,32 @@ class user_address(models.Model):
     def __str__(self):
         return f"{self.user}"
     
-
-
-class User_cart(models.Model):
+class Cart(models.Model):
     user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    PID=models.CharField(max_length=5,null=True)
-    Category=models.CharField(max_length=15,null=True)
-    Brand=models.CharField(max_length=15,null=True)
-    PName=models.CharField(max_length=20,null=True,verbose_name='Product Name')
-    Price=models.PositiveBigIntegerField(null=True)
-    Quantity=models.IntegerField(null=True)
-    PImage=models.ImageField(null=True,verbose_name='Product Image')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    PID = models.CharField(max_length=10)
+    content_object = GenericForeignKey("content_type", "PID")
+    Quantity=models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return self.PID
+
 
 
 
 class Order(models.Model):
     user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     Order_time=models.DateTimeField(auto_now_add=True)
-    PID=models.CharField(max_length=5,null=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    PID = models.CharField(max_length=10)
+    content_object = GenericForeignKey("content_type", "PID")
+    Quantity=models.PositiveIntegerField(default=1)
     Category=models.CharField(max_length=15,null=True)
-    Brand=models.CharField(max_length=15,null=True)
-    PName=models.CharField(max_length=20,null=True,verbose_name='Product Name')
     Price=models.PositiveBigIntegerField(null=True)
-    Quantity=models.IntegerField(null=True)
-    PImage=models.ImageField(null=True,verbose_name='Product Image')
+
+    def __str__(self):
+        return self.Category
+
 
 
 

@@ -10,6 +10,7 @@ click-repl==0.3.0
 coverage==7.4.0
 Django==5.0.1
 django-debug-toolbar==4.3.0
+django-extensions==3.2.3
 django-mathfilters==1.0.0
 django-phonenumber-field==7.3.0
 djangorestframework==3.14.0

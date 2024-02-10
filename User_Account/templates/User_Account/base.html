@@ -75,9 +75,13 @@
                                 <li><a class="dropdown-item" href="{% url "logout" %}">Logout</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item mx-2">
-                            <a href="{% url "cart" %}" class="nav-link"><span id="cart_no" class="badge bg-danger">{{ cart_no }}</span> Cart </a>
-                        </li>
+                        
+                            <li class="nav-item mx-2">
+                                <a href="{% url "cart" %}" class="nav-link"><span id="cart_no" class="badge bg-danger">{{ cart_no }}</span> Cart </a>
+                            </li>
+                            
+
+                        
                         {% endif %}
                         {% if not request.user.is_authenticated %}
                         <li class="nav-item mx-2">

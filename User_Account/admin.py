@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import User_Reg,User_Change_Reg
-from .models import CustomUser,user_address,User_cart,Order
+from .models import CustomUser,user_address,Cart,Order
 
 
 
@@ -51,13 +51,14 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ("user","Order_time","Category","Quantity","PID","Brand","PName","Price","PImage")
+    list_display = ("user","Order_time","Category","Quantity","PID","Price",)
+    readonly_fields = ('content_type',)
     search_fields = ("Order_time",'Brand','PName',"Category")
-    
-@admin.register(User_cart)
-class User_CartAdmin(admin.ModelAdmin):
-    list_display = ("user","Category","Quantity","PID","Brand","PName","Price","PImage")
-    search_fields = ('Brand','PName',"Category")
+  
+@admin.register(Cart)
+class Cart_Admin(admin.ModelAdmin):
+    list_display = ("user","Quantity","PID","content_object")
+    readonly_fields = ('content_type',)
     
 
 

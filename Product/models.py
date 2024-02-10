@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
+from User_Account.models import Cart
+
 
 
 class all_Products(models.Model):       # COMM0N TO ALL PRODUCTS
@@ -7,6 +10,7 @@ class all_Products(models.Model):       # COMM0N TO ALL PRODUCTS
     Description=models.TextField(null=True)
     Price=models.PositiveBigIntegerField(null=True)
     Quantity=models.IntegerField(null=True)
+    Cart = GenericRelation(Cart,related_query_name="Cart")
 
     class Meta:
         abstract = True
