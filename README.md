@@ -61,7 +61,16 @@ Open another terminal and start Celery worker for handling background tasks:
 ```bash
 celery -A Yyuimart worker -l INFO
 ```
+### 7. Run Django Test
 
+```bash
+coverage run --source='.' manage.py test 
+coverage report
+```
+Generate the report in HTMl for better visualization
+```bash
+coverage html
+```
 Now, your Django project is up and running! Visit `http://localhost:8000` in your web browser to access the application.
 
 Feel free to customize the instructions based on your specific project details and naming conventions.
