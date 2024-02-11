@@ -16,11 +16,14 @@
                     </div>
                     <div class="d-flex flex-wrap align-items-center">
                         <div class="mr-3" style="width: 100px; height: 100px; overflow: hidden;">
-                            <img src="" data-src="{{ order.PImage.ur }}" alt="Product Image" class="img-thumbnail lazy-load" style="width: 100%; height: auto;">
+                            <img src="" data-src="{{ order.content_object.PImage.url }}" alt="Product Image" class="img-thumbnail lazy-load" style="width: 100%; height: auto;">
                         </div>
                         <div>
-                            <p class="mb-1"><a href="{% url 'Product_Details' order.PID %}" class="Product_info"><strong>{{ order.Brand }} {{ order.PName }}</strong></a></p>
+                            <p class="mb-1"><a href="{% url 'Product_Details' 11 order.PID  %}" class="Product_info"><strong>{{ order.Brand }} {{ order.PName }}</strong></a></p>
+                            <p class="mb-1"><strong>Name:</strong> {{ order.Address.Name }}</p>
+                            <p class="mb-1"><strong>Mobile:</strong> {{ order.Address.Phone }}</p>
                             <p class="mb-1"><strong>Quantity:</strong> {{ order.Quantity }}</p>
+                            <p class="mb-1"><strong>Address:</strong> {{ order.Address.house_no }} {{ order.Address.Road_name }}</p>
                             <p class="mb-1"><strong>Price:</strong> Rs. {{ order.Price|num_format }}</p>
                         </div>
                     </div>

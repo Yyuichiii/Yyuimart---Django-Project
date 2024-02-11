@@ -1,0 +1,287 @@
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS "django_migrations";
+CREATE TABLE IF NOT EXISTS "django_migrations" (
+	"id"	integer NOT NULL,
+	"app"	varchar(255) NOT NULL,
+	"name"	varchar(255) NOT NULL,
+	"applied"	datetime NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "User_Account_customuser";
+CREATE TABLE IF NOT EXISTS "User_Account_customuser" (
+	"id"	integer NOT NULL,
+	"password"	varchar(128) NOT NULL,
+	"last_login"	datetime,
+	"is_superuser"	bool NOT NULL,
+	"first_name"	varchar(150) NOT NULL,
+	"last_name"	varchar(150) NOT NULL,
+	"is_staff"	bool NOT NULL,
+	"is_active"	bool NOT NULL,
+	"date_joined"	datetime NOT NULL,
+	"email"	varchar(254) NOT NULL UNIQUE,
+	"name"	varchar(30) NOT NULL,
+	"Phone"	varchar(15) NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+DROP TABLE IF EXISTS "Product_headphone";
+CREATE TABLE IF NOT EXISTS "Product_headphone" (
+	"Brand"	varchar(15),
+	"PImage"	varchar(100),
+	"Description"	text,
+	"Price"	bigint unsigned CHECK("Price" >= 0),
+	"Quantity"	integer,
+	"PID"	varchar(10) NOT NULL,
+	"PName"	varchar(20),
+	"Category"	varchar(15),
+	PRIMARY KEY("PID")
+);
+DROP TABLE IF EXISTS "Product_laptop";
+CREATE TABLE IF NOT EXISTS "Product_laptop" (
+	"Brand"	varchar(15),
+	"PImage"	varchar(100),
+	"Description"	text,
+	"Price"	bigint unsigned CHECK("Price" >= 0),
+	"Quantity"	integer,
+	"PID"	varchar(10) NOT NULL,
+	"PName"	varchar(20),
+	"Category"	varchar(15),
+	PRIMARY KEY("PID")
+);
+DROP TABLE IF EXISTS "Product_men";
+CREATE TABLE IF NOT EXISTS "Product_men" (
+	"Brand"	varchar(15),
+	"PImage"	varchar(100),
+	"Description"	text,
+	"Price"	bigint unsigned CHECK("Price" >= 0),
+	"Quantity"	integer,
+	"PID"	varchar(10) NOT NULL,
+	"PName"	varchar(20),
+	"Category"	varchar(15),
+	PRIMARY KEY("PID")
+);
+DROP TABLE IF EXISTS "Product_mobile";
+CREATE TABLE IF NOT EXISTS "Product_mobile" (
+	"Brand"	varchar(15),
+	"PImage"	varchar(100),
+	"Description"	text,
+	"Price"	bigint unsigned CHECK("Price" >= 0),
+	"Quantity"	integer,
+	"PID"	varchar(10) NOT NULL,
+	"PName"	varchar(20),
+	"Category"	varchar(15),
+	PRIMARY KEY("PID")
+);
+DROP TABLE IF EXISTS "Product_shoe";
+CREATE TABLE IF NOT EXISTS "Product_shoe" (
+	"Brand"	varchar(15),
+	"PImage"	varchar(100),
+	"Description"	text,
+	"Price"	bigint unsigned CHECK("Price" >= 0),
+	"Quantity"	integer,
+	"PID"	varchar(10) NOT NULL,
+	"PName"	varchar(20),
+	"Category"	varchar(15),
+	PRIMARY KEY("PID")
+);
+DROP TABLE IF EXISTS "Product_women";
+CREATE TABLE IF NOT EXISTS "Product_women" (
+	"Brand"	varchar(15),
+	"PImage"	varchar(100),
+	"Description"	text,
+	"Price"	bigint unsigned CHECK("Price" >= 0),
+	"Quantity"	integer,
+	"PID"	varchar(10) NOT NULL,
+	"PName"	varchar(20),
+	"Category"	varchar(15),
+	PRIMARY KEY("PID")
+);
+INSERT INTO "django_migrations" ("id","app","name","applied") VALUES (1,'Product','0001_initial','2024-02-11 10:28:38.487503'),
+ (2,'contenttypes','0001_initial','2024-02-11 10:28:38.506677'),
+ (3,'contenttypes','0002_remove_content_type_name','2024-02-11 10:28:38.535152'),
+ (4,'auth','0001_initial','2024-02-11 10:28:38.581042'),
+ (5,'auth','0002_alter_permission_name_max_length','2024-02-11 10:28:38.603116'),
+ (6,'auth','0003_alter_user_email_max_length','2024-02-11 10:28:38.628008'),
+ (7,'auth','0004_alter_user_username_opts','2024-02-11 10:28:38.646079'),
+ (8,'auth','0005_alter_user_last_login_null','2024-02-11 10:28:38.664153'),
+ (9,'auth','0006_require_contenttypes_0002','2024-02-11 10:28:38.682482'),
+ (10,'auth','0007_alter_validators_add_error_messages','2024-02-11 10:28:38.700545'),
+ (11,'auth','0008_alter_user_username_max_length','2024-02-11 10:28:38.720110'),
+ (12,'auth','0009_alter_user_last_name_max_length','2024-02-11 10:28:38.737924'),
+ (13,'auth','0010_alter_group_name_max_length','2024-02-11 10:28:38.762231'),
+ (14,'auth','0011_update_proxy_permissions','2024-02-11 10:28:38.789635'),
+ (15,'auth','0012_alter_user_first_name_max_length','2024-02-11 10:28:38.803940'),
+ (16,'User_Account','0001_initial','2024-02-11 10:28:38.895559'),
+ (17,'admin','0001_initial','2024-02-11 10:28:38.929825'),
+ (18,'admin','0002_logentry_remove_auto_add','2024-02-11 10:28:38.963371'),
+ (19,'admin','0003_logentry_add_action_flag_choices','2024-02-11 10:28:38.990685'),
+ (20,'sessions','0001_initial','2024-02-11 10:28:39.012558'),
+ (21,'Product','0002_headphone_category_laptop_category_men_category_and_more','2024-02-11 10:58:22.096016'),
+ (22,'User_Account','0002_order_address','2024-02-11 11:14:07.294891'),
+ (23,'User_Account','0003_alter_order_address','2024-02-11 11:33:10.670832');
+INSERT INTO "User_Account_customuser" ("id","password","last_login","is_superuser","first_name","last_name","is_staff","is_active","date_joined","email","name","Phone") VALUES (1,'pbkdf2_sha256$720000$LRjyk9FL9x2O9IUHKNC3aN$wTWC8HxIWXbWzsaxxr3Kft/oq9elM7F0u1vSFiHhJ5A=','2024-02-11 11:39:50.053444',1,'','',1,1,'2024-02-11 10:34:11.643692','admin@gmail.com','Admin',''),
+ (2,'pbkdf2_sha256$720000$LqlGncTMRqkz3EBrBLFWD0$uylSCV5PjhjTeBXKLEHIPYsUxvlCUpXb91CMn5uB6qE=',NULL,0,'','',0,1,'2024-02-11 11:05:30.223660','ritikmehradec@gmail.com','Ritik Mehra','8529484995'),
+ (3,'pbkdf2_sha256$720000$I8F14gTn1j2BJ6UNcK3R4P$pxaWmP80EA9lzsx/dCGBWtwIVy3XbM1mQ7+EyWDXgVA=','2024-02-11 11:40:17.047850',0,'','',0,1,'2024-02-11 11:06:43.843447','rtkmehra85@gmail.com','Ritik','8529484995');
+INSERT INTO "Product_headphone" ("Brand","PImage","Description","Price","Quantity","PID","PName","Category") VALUES ('Sony','HeadPhone/sony_headphones.jpg','Open Back Studio Monitor Headphones for creating spatial and stereo sound with wide frequency range and soundstage feel. Neutral and high-resolution acoustic characteristics reproduce all sound elements exactly as they are, providing lightweight and excellent wearing comfort for creators during long studio work.
+
+Uncoloured frequency response suitable for production, obtained through collaboration with creators (5 Hz–80 kHz).',59990,120,'H1','MDR-MV1','HeadPhone'),
+ ('JBL','HeadPhone/headphones.jpg','The 4-mic crystal call algorithm of the JBL Tour One M2 allows you to have better conversations even in loud or windy environments or to get help from your preferred voice assistant. And with VoiceAware, you can choose how much of your own voice to hear by controlling the amount of mic input routed back into your earbuds.
+
+Immerse yourself in JBL Spatial Sound and feel like being in a theatre, at a concert or in the studio with your favorite artist. Thanks to this proprietary technology, sound comes from virtually anywhere around you, no matter the source or the device you are playing from',24999,200,'H2','Tour One M2','HeadPhone'),
+ ('Sony','HeadPhone/headphones_5.jpg','From airplane noise to people’s voices, our WH-1000XM5 wireless headphones with multiple-microphone noise cancelling keep out more high and mid-frequency sounds than ever. And with Auto NC Optimiser, noise cancelling is automatically optimised based on your wearing conditions and environment.
+
+With four microphones on each earcup, this is our biggest ever step forward in noise cancelling. Ambient sound is captured even more accurately for a dramatic reduction in high-frequency noise. Thanks to Auto NC Optimiser, noise-cancelling performance is always and automatically optimised based on wearing conditions and external environmental factors such as atmospheric pressure.',34990,180,'H3','WH-1000XM5 Headphone','HeadPhone'),
+ ('Apple','HeadPhone/headphones1.jpg','Unlike traditional, circular earbuds, the design of the EarPods is defined by the geometry of the ear. Which makes them more comfortable for more people than any other earbud-style headphones.
+
+The speakers inside the EarPods have been engineered to maximise sound output, which means you get high-quality audio.
+
+The EarPods (Lightning Connector) also include a built-in remote that lets you adjust the volume, control the playback of music and video, and answer or end calls with a press of the remote.',2000,300,'H4','EarPods','HeadPhone'),
+ ('JBL','HeadPhone/headphones_2.jpg','Smartly designed 6mm drivers enhanced by the stick''s form factor deliver JBL''s Pure Bass Sound, so you''ll feel every pulsing beat
+
+Thanks to the next generation Bluetooth technology, the JBL Tune Beam earbuds stream audio with low power consumption at high quality. Plus, BT 5.3 allows you to stream synchronized audio independently to each earbud, so that you can use either or both earbuds. Or you can share your video or music content with a friend wearing headphones, as BT 5.3 lets you seamlessly stream audio to multiple listeners.',5999,250,'H5','Tune Beam','HeadPhone'),
+ ('BEYERDYNAMIC','HeadPhone/headphones_4.jpg','Highly popular with professional gamers, the Beyerdynamic MMX 150 features a closed-back offering perfect noise isolation. This headphone embeds a 40mm dynamic driver with clear sound tuned precisely for gaming. It also consists of a META VOICE cardioid condenser microphone featuring a 9.9 mm capsule to reproduce your voice naturally and minimize background noise. The MMX 150 features volume control and mute buttons on the earcup itself, so you don''t have to waste time searching for it on the headphone cable. Augmented mode is another feature exclusive to the MMX 150 that helps you tune into your surroundings quickly without removing the headset. The headphone features a detachable 3.5mm cable for devices with a 4-pin jack connector and a detachable 2.4m USB cable for PC.',11490,150,'H6','MMX 150','HeadPhone');
+INSERT INTO "Product_laptop" ("Brand","PImage","Description","Price","Quantity","PID","PName","Category") VALUES ('Apple','Laptop/macbook.jpg','Apple M2 chip
+
+8-core CPU with 4 performance cores and 4 efficiency cores
+8-core GPU
+16-core Neural Engine
+100GB/s memory bandwidth
+Media engine
+
+Hardware-accelerated H.264, HEVC, ProRes and ProRes RAW
+Video decode engine
+Video encode engine
+ProRes encode and decode engine
+Configurable to:
+
+M2 with 8-core CPU and 10-core GPU',114900,120,'L1','MacBook Air','Laptop'),
+ ('Dell','Laptop/dell_2_laptop.jpg','13th Gen Intel® Core™ i5-1335U (12 MB cache, 10 cores, 12 threads, up to 4.60 GHz Turbo)
+
+Windows 11 Home Single Language, English
+
+Intel® Iris® Xe Graphics
+
+8 GB: LPDDR5, 4800 MT/s (onboard)
+
+512 GB, M.2, PCIe NVMe, SSD
+
+14.0-inch 16:10 FHD+ (1920 x 1200) Anti-Glare Non-Touch 250nits WVA Display with ComfortView Support',65990,200,'L2','Inspiron 14 Laptop','Laptop'),
+ ('Dell','Laptop/dell_laptop.jpg','13th Gen Intel® Core™ i7-1360P (18 MB cache, 12 cores, up to 5.00 GHz Turbo)
+
+Windows 11 Home Single Language, English
+
+Intel® Iris® Xe Graphics
+
+16 GB: LPDDR5, 6000 MT/s (onboard), dual-channel
+
+1 TB, M.2, PCIe NVMe, SSD
+
+13.4", UHD+ 3840x2400, 60Hz, Touch, Anti-Reflect, 500 nit, InfinityEdge',181689,100,'L3','XPS 13 Plus Laptop','Laptop'),
+ ('Dell','Laptop/dell_laptop_2.jpg','11th Generation Intel® Core™ i3-1115G4 Processor (6MB Cache, up to 4.1 GHz)
+
+Windows 11 Home Single Language, English
+
+Intel® UHD Graphics
+
+8 GB: 1 x 8 GB, DDR4, 3200 MT/s
+
+256 GB, M.2, PCIe NVMe, SSD
+
+15.6", FHD 1920x1080, 120Hz, WVA, Non-Touch, Anti-Glare, 250 nit, Narrow Border, LED-Backlit',35990,250,'L4','Vostro 3520 Laptop','Laptop'),
+ ('Lenovo','Laptop/lenevo_laptop.jpg','Durable, high-performance, business laptop
+Powerful 13th Gen Intel® Core™ processors, optional discrete graphics
+Great for multitasking, with plenty of memory and fast storage
+Steadfast security options
+Gorgeous 40.64cms (16) WQXGA (2560 x 1600) display option
+1x USB 2.0, 1x USB 3.2 Gen 1 (Always On), 1x USB-C 3.2 Gen 2 (support data transfer, Power Delivery 3.0 and DisplayPort 1.4), 1x Thunderbolt 4 / USB4 40Gbps (support data transfer, Power Delivery 3.0 and DisplayPort 1.4), 1x HDMI, up to 4K/60Hz, 1x Ethernet (RJ-45), 1x Headphone / microphone combo jack (3.5mm)',55515,220,'L5','ThinkPad E16','Laptop');
+INSERT INTO "Product_men" ("Brand","PImage","Description","Price","Quantity","PID","PName","Category") VALUES ('Adidas','Men/arsenal_jersey.jpg','hey say lightning never strikes twice. And 20 years on, the Gunners remain the only club to finish an English top-flight football season undefeated.
+
+The Arsenal 23/24 Home Jersey celebrates the team''s unique anniversary with lightning bolts and gold details. Created for loyal club supporters, the jersey features sweat-wicking AEROREADY technology to keep you feeling dry, while a woven badge shows off your team pride. Made with 100% recycled materials, this product represents just one of our solutions to help End Plastic Waste.',5299,500,'MF1','ARSENAL HOME JERSEY','Men'),
+ ('ZARA','Men/Black_Tshirt.jpg','Regular fit T-shirt with a round neckline and short sleeves.
+
+We work with monitoring programmes to ensure compliance with our social, environmental and health and safety standards for our products. To assess compliance, we have developed a programme of audits and continuous improvement plans.',1590,230,'MF2','BASIC BLACK T-SHIRT','Men'),
+ ('ROCKSTAR','Men/blue_jeans.jpg','SLIM FIT JEANS-FADED LIGHT BLUE
+Color: Lt.Blue
+Pattern: Solid
+Fabric: Dobby Knited
+Fit: Super Slim
+Model Wearing Size: 32
+Model Height : 6 ft
+Washcare: Machine Wash According To Instructions On Care Label
+Article No: RDQ0003',1999,300,'MF3','SLIM FIT JEANS BLUE','Men'),
+ ('Nike','Men/Brasil_Jersey.jpg','Men Yellow Brazil CBF Stadium Home Jersey
+
+PRODUCT DETAILS:
+Yellow T-shirt
+has a V-neck
+short raglan sleeves
+Warranty: 6 months against manufacturing defects (not valid on products with more than 20% discount)
+
+Size & Fit
+The model (height 6'') is wearing a size M
+
+Material & Care
+100% polyester
+Machine-wash',4995,300,'MF4','Brazil Home Jersey','Men'),
+ ('BRITISH CLUB','Men/casual_shirt_2.jpg','Product Details
+Curved hemline
+Slim Fit
+Package contains: 1 shirt
+Machine wash
+100% Cotton
+Product Code: 469129470001',663,500,'MF5','Slim Shirt','Men'),
+ ('WOXEN','Men/casual_shirt.jpg','Spread Collared Checked Shirt
+
+100% polyester rayon
+Regular Fit
+Package contains: 1 shirt
+Machine wash
+100% polyester
+Product Code: 466434087004',400,550,'MF6','Checked Shirt','Men'),
+ ('Allen Solly','Men/White_Shirt.jpg','Men White Solid Crew Neck T-Shirt
+
+Ace weekend dressing in this White Solid Crew Neck T-shirt from Allen Solly by Allen Solly.
+
+StyleCode : ASKCCUSGF439579,
+Pattern : Solid,
+Sleeves : Half Sleeves,
+Occasion : Casual,
+Color : White,
+Subbrand : Allen Solly,
+ProductType : T-shirt,
+Material : 100% Cotton,',758,420,'MF7','White Neck T-Shirt','Men');
+INSERT INTO "Product_mobile" ("Brand","PImage","Description","Price","Quantity","PID","PName","Category") VALUES ('Apple','Mobile/apple_14.jpg','iPhone 14 and iPhone 14 Plus introduce a new standard for photo and video capture with a new 12MP Main camera featuring a larger sensor and larger pixels, a new front TrueDepth camera, the Ultra Wide camera to capture more of a scene, and Photonic Engine for a giant leap in low-light performance.',62000,100,'M1','iPhone 14','Mobile'),
+ ('Apple','Mobile/iphone15.jpg','Phone 15 Pro is the first iPhone to feature an aerospace‑grade titanium design, using the same alloy that spacecraft use for missions to Mars.
+
+Titanium has one of the best strength‑to‑weight ratios of any metal, making these our lightest Pro models ever. You’ll notice the difference the moment you pick one up.
+
+A17 Pro is an entirely new class of iPhone chip that delivers our best graphics performance by far.
+
+Mobile games will look and feel so immersive, with incredibly detailed environments and more realistic characters. And with industry-leading speed and efficiency, A17 Pro takes fast and runs with it.',80000,150,'M2','iPhone 15','Mobile'),
+ ('Apple','Mobile/iphone.jpg','The iPhone 13 display has rounded corners that follow a beautiful curved design, and these corners are within a standard rectangle. When measured as a standard rectangular shape, the screen is 15.40 centimetres / 6.06“ diagonally (actual viewable area is less).',55000,80,'M3','iPhone 13','Mobile'),
+ ('MI Redmi','Mobile/mi_phone.jpg','The Redmi Note 12 5G is the first phone in the under 20K segment to have a combination of Snapdragon 5G, Super AMOLED Display and 120Hz refresh rate. Redmi Note 12 5G features: The new classic Redmi Note 12 5G is powered by Qualcomm Snapdragon® 4 Gen 1, a 5G processor to deliver that fast and smooth experience.',18000,250,'M4','Note 12 5G','Mobile'),
+ ('Samsung','Mobile/samsung_flip.jpg','The Z Flip 3 features a 6.7-in 22:9 AMOLED display now with support for 120 Hz refresh rate and also features support for HDR10+.[7] The screen features a hole punch camera cutout for the front facing camera. The back of the phone has a small 1.9-in cover screen, an improvement in size over the 1.1-in cover screen on the original Z Flip, which you can use to display the time, date and battery status, interact with notifications, answer phone calls and act as a viewfinder.',52000,120,'M5','Z Flip','Mobile');
+INSERT INTO "Product_shoe" ("Brand","PImage","Description","Price","Quantity","PID","PName","Category") VALUES ('adidas','Shoe/casual_shoes.jpg','An iconic silhouette that has influenced fashion, pop culture and beyond, the Campus returns with premium materials. These shoes flash an upper made of pigskin nubuck, giving them a street-ready look. A streamlined rubber outsole updates the archival style. A reinforced toe cap and serrated leather 3-Stripes keep the shoes rooted in adidas heritage.',1899,200,'S1','STREET ICON SHOES','Shoe'),
+ ('adidas','Shoe/football_shoes.jpg','adidas X CRAZYFAST.3 TURF BOOTS BLACK
+The game''s gone? Nah. It''s just waiting for you to change it. Again. And again. Like to keep your rivals guessing? Go wild in adidas X Crazyfast. Keeping you stable at full tilt on short-bladed synthetic fibre, these football boots for juniors sit on a lug rubber artificial turf outsole. Featuring extra layers only where reinforcement is required, their lightweight coated textile upper comes with a flat-knit collar that ensures you stay locked in.
+
+Made with a series of recycled materials, this upper features at least 50% recycled content. This product represents just one of our solutions to help end plastic waste.',5999,150,'S2','X CRAZYFAST.3','Shoe'),
+ ('PUMA','Shoe/puma_white_shoes.jpg','PUMA Smashic Unisex Sneakers WHITE
+Step up your sneaker game with the Smashic Sneakers from PUMA. The PUMA formstrip adds a touch of style, while the Softfoam sockliner ensures maximum comfort. The rubber outsole provides superior traction, making these sneakers perfect for any casual or athletic occasion.
+
+SoftFoam+: PUMA’s comfort sockliner for instant step-in and long-lasting comfort that provides soft cushioning every step of your day',2699,150,'S3','Smashic White','Shoe'),
+ ('Nike','Shoe/red_casual_shoes.jpg','Nike Court Borough Low Recraft
+
+Run (don''t walk) to your new favourite Borough. Made for the long haul, this "recrafted" legend uses a combination of durable materials on the upper and outsole to achieve a classic look made in a whole new way. A redesigned toe box and midfoot give your feet a little extra room so you can run, jump and play just a bit longer and a little bit harder.',4495,250,'S4','Red Casual Shoes','Shoe'),
+ ('Nike','Shoe/running_shoes.jpg','Nike InfinityRN 4
+
+With supportive cushioning built for a smooth run, the Nike InfinityRN 4 is a brand-new take on a familiar favourite. It''s made from our all-new Nike ReactX foam, which gives you 13% more energy return compared to Nike React foam, to help you stay fresh and bouncy. (What''s more? Nike ReactX reduces its carbon footprint in a pair of midsoles by at least 43% compared with Nike React foam.*) We coupled the ReactX foam with Nike Running''s best-fitting Flyknit yet, so you can take off any time, anywhere with secure upper support and breathability. It''s the kind of shoe that can grant you that priceless peace of mind to go faster and further, thanks to an intuitive design that supports every stride. *The carbon footprint of ReactX is based on a cradle-to-gate assessment reviewed by PRé Sustainability B.V. and Intertek China. Other midsole components such as airbags, plates or other foam formulations were not considered.',14995,80,'S5','InfinityRN 4','Shoe');
+INSERT INTO "Product_women" ("Brand","PImage","Description","Price","Quantity","PID","PName","Category") VALUES ('ARMANI','Women/women_1.jpg','Giorgio Armani is one of the top female clothing brands in the world. It is an Italian luxury fashion house and is commonly known as Armani. This company was founded in 1975 and has its headquarters in Milan, Italy. Armani provides high-end class tailoring and luxury dressing. Armani holds a prestigious place in the fashion industry and many Hollywood actors and actresses are loyal customers to this clothing brand. Armani also designs and retails shoes, jewelry, home interiors, and cosmetics.',7320,40,'W1','BLACK','Women'),
+ ('Dior','Women/women_2.jpg','Dior ranks ninth among our top 10 women clothing brands. This is a French luxury goods company founded on 16 December 1946 and is controlled and chaired by French businessman Bernard Arnault, who also head’s the world’s largest luxury group LVMH. This is one of the top clothing brands and has continued to inspire the fashion industry through its elegant and stylish design which is ahead of its time. Dior sells a vast array of beauty products, shoes, perfumes, and fashion clothing.',8000,50,'W2','White','Women'),
+ ('BURBERRY','Women/women_3.jpg','Blueberry ranks seventh among our top 10 female clothing brands. This company was founded in 1856 by Thomas Burberry in England. The company has its headquarters based in London, United Kingdom. This is one of the top western wear brands and one of the most iconic and legendary figures associated with this brand is Audrey Hepburn. The company also obtained a royal warrant and is famous for its accessories, clothing, perfumes, and has a renowned name in innovation.',9000,25,'W3','Casual','Women'),
+ ('RALPH LAUREN','Women/women_4.jpg','We are all aware of the famous American sit-com ‘Friends’ in which one of the character Rachel that is Jennifer Aniston is associated with Ralph Lauren. This is one of the top western wear brands and ranks sixth among our list of top 10 female clothing brands. This brand is also associated with many more celebrities. The Ralph Lauren company was founded in 1967 and has its headquarters based in New York City, United States. The renowned Polo is also under this company and the products offered by them are luxury clothing, footwear, fragrances, and jewelry.',17050,20,'W4','BLACK','Women'),
+ ('CHANEL','Women/women_5.jpg','Making to the top five of the top 10 female clothing brands in the world is Chanel. This company was founded in 1909 by Coco Chanel. The company is French has its headquarters based in Neuilly-sur-Seine, France. Chanel is famous for its jersey fabric produced garments that were comfortable as well as affordable. The company’s agenda is to make sure that what women wear is stylish and comfortable. The timeless little dress was also introduced by Chanel. The total revenue collection for this company is $ 5.4 billion.',12000,12,'W5','CASUAL','Women'),
+ ('PRADA','Women/women_6.jpg','Prada is known to be one of the world’s most desirable brands for women. This company ranks fourth among our top 10 female clothing brands list. This company was founded in 1913 as Fratelli Prada and was founded by Mario Prada. The company has its headquarters based in Milan, Italy, and has over 618 boutiques worldwide. The brand has famous personalities related to Meryl Streep who had almost 40 percent Prada products in her shoe wardrobe after she got nominated for Oscar for the film The Devil Wears Prada. This brand is also one of the most expensive brands and offers amazing clothing with great styles which makes it the most desirable brand for women.',25999,50,'W6','RED','Women'),
+ ('GUCCI','Women/Women_dress.jpg','The second place in our list of top 10 female clothing brands is secured by Gucci. This brand is known to have produced clothing for many red carpet events such as Oscars. This company was founded in 1921 by Guccio Gucci. The company has its headquarters based in Florence, Tuscany, Italy. In the modern culture, Gucci turned into an eponymous adjective “I feel Gucci” which is usually used to describe something which is a high-end luxury. This brand is also one of the most expensive brands and therefore is considered to be a top western wear brand.',21000,40,'W7','CASUAL','Women'),
+ ('ARMANI','Women/women_8.jpg','Giorgio Armani is one of the top female clothing brands in the world. It is an Italian luxury fashion house and is commonly known as Armani. This company was founded in 1975 and has its headquarters in Milan, Italy. Armani provides high-end class tailoring and luxury dressing. Armani holds a prestigious place in the fashion industry and many Hollywood actors and actresses are loyal customers to this clothing brand. Armani also designs and retails shoes, jewelry, home interiors, and cosmetics.',55000,10,'W8','Special','Women'),
+ ('GUCCI','Women/women.jpg','The second place in our list of top 10 female clothing brands is secured by Gucci. This brand is known to have produced clothing for many red carpet events such as Oscars. This company was founded in 1921 by Guccio Gucci. The company has its headquarters based in Florence, Tuscany, Italy. In the modern culture, Gucci turned into an eponymous adjective “I feel Gucci” which is usually used to describe something which is a high-end luxury. This brand is also one of the most expensive brands and therefore is considered to be a top western wear brand.',9999,45,'W9','CASUAL','Women');
+COMMIT;

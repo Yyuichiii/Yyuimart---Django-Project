@@ -1,20 +1,18 @@
 from django.shortcuts import render,redirect
-from .models import user_address,CustomUser,Cart
-from django.urls import reverse
-from django.http import HttpResponse,HttpResponseRedirect
+from .models import user_address,CustomUser,Cart,Order
 from .forms import User_Reg,login_form,User_Change_Reg,custom_password_change,address_form,otp_form
 from .email import password_email,order_recieved,email_otp,email_success_register
 from django.contrib import messages
 from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
 from Product.models import Mobile,Laptop,HeadPhone,Men,Women,Shoe 
 from django.views import View
-from datetime import datetime
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from User_Account.utils import generateOTP
 from django.core.paginator import Paginator
 from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
 
 
 
@@ -282,70 +280,52 @@ class edit_address(address):
 
 # Order Placed Showed but orders are not saving and cart is deleting 
 def success(request):
-    pass
-    # referer = request.META.get('HTTP_REFERER')
-    # if referer is None:
-    #     return redirect('home')R
+    referer = request.META.get('HTTP_REFERER')
+    if referer is None:
+        return redirect('home')
     
-    # tp=0
-    # # obj=User_cart.objects.filter(user=request.user)
-    # # data_list = []
-    # for o in obj:
-    #     tp=tp+o.Price
-    #     Order.objects.create(user=request.user,PID=o.PID,Category=o.Category,Brand=o.Brand,PName=o.PName,Price=o.Price,Quantity=o.Quantity,PImage=o.PImage)
-
-    #     data_list.append({
-    #     'PID': o.PID,
-    #     'Category': o.Category,
-    #     'Brand': o.Brand,
-    #     'PName': o.PName,
-    #     'Price': o.Price,
-    #     'Quantity': o.Quantity,
-    #     'PImage': o.PImage.url,  # Assuming PImage is a FileField
-    # })
+    with transaction.atomic():
+        cart_queryset = Cart.objects.filter(user=request.user)
+        orders_to_create = []
+        for obj in cart_queryset:
+            order = Order(
+                user=obj.user,
+                content_type=obj.content_type,
+                PID=obj.PID,
+                Quantity=obj.Quantity,
+                Category=obj.content_object.Category,
+                Price=obj.content_object.Price * obj.Quantity,
+                Address=obj.user.user_address
+            )
+            orders_to_create.append(order)
         
-    # print(data_list)
-        
-    # total_price = 0
-    # user_cart_objects = User_cart.objects.filter(user=request.user)
+        # Bulk create orders
+        order=Order.objects.bulk_create(orders_to_create)
+        total_price = sum(obj.Price for obj in order)
 
-    # order_objects = []
-    # for cart_object in user_cart_objects:
-    #     total_price += cart_object.Price
-    #     order_objects.append(Order(
-    #         user=request.user,
-    #         PID=cart_object.PID,
-    #         Category=cart_object.Category,
-    #         Brand=cart_object.Brand,
-    #         PName=cart_object.PName,
-    #         Price=cart_object.Price,
-    #         Quantity=cart_object.Quantity,
-    #         PImage=cart_object.PImage
-    #     ))
+        # Delete cart items
+        cart_queryset.delete()
 
-    # with transaction.atomic():
-    #     Order.objects.bulk_create(order_objects)
+    # Email Services    
+    order_recieved(order,request.user,total_price)
+    messages.success(request, "Order has been Successfully Received ")
+    return redirect("home")
+    # except:
+        # messages.error(request,"Something wrong Happened ")
+        # return redirect("cart")
 
-
-# Email Service temporarily Stopped    
-    
-    # order_recieved(obj,request.user,tp,request.user.name)
-    # obj.delete()
-    # messages.success(request,"Order has been Successfully Recevied ")
-    # return redirect("home")
 
 
 # Orders Section
-# def orders(request):
-#     if not(request.user.is_authenticated):
-#         return redirect('home')
+def orders(request):
+    if not(request.user.is_authenticated):
+        return redirect('home')
     
-#     obj=Order.objects.filter(user=request.user).order_by('-id')
-    
+    obj = Order.objects.filter(user=request.user).order_by('-id').select_related('user','Address','content_type')
 
-#     paginator = Paginator(obj, 5)  # Show 5 orders per page.
+    paginator = Paginator(obj, 5)  # Show 5 orders per page.
 
-#     page_number = request.GET.get("page")
-#     page_obj = paginator.get_page(page_number)
-#     return render(request, "User_Account/orders.html", {"Products": page_obj})
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    return render(request, "User_Account/orders.html", {"Products": page_obj})
     

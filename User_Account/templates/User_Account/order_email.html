@@ -73,7 +73,7 @@
 <body>
     <div class="container">
         <h1>Order Confirmation</h1>
-        <p>Dear {{ data.Name }},</p>
+        <p>Dear {{data.order_items_list.0.user.name}},</p>
         <p>Thank you for your order! Below are the details:</p>
         <table>
             <thead>
@@ -85,9 +85,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in data.order_items %}
+                
+                {% for item in data.order_items_list %}
                 <tr>
-                    <td>{{ item.Brand }} {{ item.PName }}</td>
+                    <td>{{ item.content_object.Brand }} {{ item.content_object.PName }}</td>
                     <td>{{ item.Category }}</td>
                     <td>{{ item.Quantity }}</td>
                     <td>Rs. {{ item.Price }}</td>

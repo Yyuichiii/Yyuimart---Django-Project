@@ -52,7 +52,7 @@ class AddressAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ("user","Order_time","Category","Quantity","PID","Price",)
-    readonly_fields = ('content_type',)
+    readonly_fields = ("user","Order_time","Category","Quantity","PID","Price",'content_type',"Order_time","Address")
     search_fields = ("Order_time",'Brand','PName',"Category")
   
 @admin.register(Cart)

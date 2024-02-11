@@ -67,16 +67,16 @@ def password_email(name,email):
     
 
 # Email for Recieved Order
+
 # @shared_task
-def order_recieved(Queryset,email,tp,name):
+def order_recieved(order,email,total_price):
     subject = 'Order Confirmed !!!'
     from_email = settings.EMAIL_HOST_USER
     to = [email]
     data={
-        'Name':name,
         'Company':settings.SITE_NAME,
-        'order_items':Queryset,
-        'total_amount':tp+100
+        'order_items_list':order,
+        'total_amount':total_price
     }
     # Load the HTML template
     html_content = render_to_string('User_Account/order_email.html', {'data': data})

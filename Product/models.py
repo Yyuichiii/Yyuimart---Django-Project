@@ -10,7 +10,7 @@ class all_Products(models.Model):       # COMM0N TO ALL PRODUCTS
     Description=models.TextField(null=True)
     Price=models.PositiveBigIntegerField(null=True)
     Quantity=models.IntegerField(null=True)
-    Cart = GenericRelation(Cart,related_query_name="Cart")
+    Category=models.CharField(max_length=15,null=True)
 
     class Meta:
         abstract = True

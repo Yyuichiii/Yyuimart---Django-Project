@@ -55,7 +55,7 @@ class Cart(models.Model):
 
 
 class Order(models.Model):
-    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='User')
     Order_time=models.DateTimeField(auto_now_add=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     PID = models.CharField(max_length=10)
@@ -63,12 +63,11 @@ class Order(models.Model):
     Quantity=models.PositiveIntegerField(default=1)
     Category=models.CharField(max_length=15,null=True)
     Price=models.PositiveBigIntegerField(null=True)
+    Address=models.ForeignKey(user_address,on_delete=models.CASCADE,null=True)
+
 
     def __str__(self):
-        return self.Category
-
-
-
+        return f"{self.user.name} {self.PID}"
 
 
    
