@@ -22,8 +22,7 @@ Follow these steps to set up and run the project on your local machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Yyuimart/your-repository.git
-cd your-repository
+git clone https://github.com/Yyuichiii/Yyuimart---Django-Project.git Yyuimart
 ```
 
 ### 2. Install Dependencies
