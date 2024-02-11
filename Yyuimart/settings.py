@@ -1,4 +1,4 @@
-# user/pass : admin/as
+# email/pass : admin@gmail.com/as
 from pathlib import Path
 import os
 
