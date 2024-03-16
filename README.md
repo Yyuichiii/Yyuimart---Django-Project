@@ -53,14 +53,21 @@ Start the development server to run the application:
 python manage.py runserver
 ```
 
-### 6. Start Celery Worker
+### 6. Start Redis Server (For Linux)
+
+```bash
+sudo systemctl start redis-server
+```
+
+
+### 7. Start Celery Worker
 
 Open another terminal and start Celery worker for handling background tasks:
 
 ```bash
 celery -A Yyuimart worker -l INFO
 ```
-### 7. Run Django Test
+### 8. Run Django Test
 
 ```bash
 coverage run --source='.' manage.py test 
