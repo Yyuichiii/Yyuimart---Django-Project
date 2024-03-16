@@ -38,11 +38,24 @@
             <h4>Rs. {{Product.Price}} 
                 <small class="fw-light text-decoration-line-through">{{ Product.Price|addition:1200 }}</small>
             </h4>
-
+            
+            {% if request.user.is_authenticated %}
             <div class="button-container">
-                <button id="cart" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
-                {% comment %} <a href="{% url "Buy_now" Product.PID %}" id="buy_now_button" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a> {% endcomment %}
+                <button id="cart" class="btn btn-primary shadow px-5 py-2"
+                hx-post="{% url 'AddCart' type.pk Product.PID %}"
+                hx-target="#cart_no"
+                >Add to Cart</button>
+                
             </div>
+            {% else %}
+            <div class="button-container">
+                <button id="cart" class="btn btn-primary shadow px-5 py-2" disabled
+                >Add to Cart</button>
+        
+            </div>
+            {% endif%}
+                
+            
             
             <h5 class="mt-5">Available Offers</h5>
             <ul>
@@ -55,29 +68,7 @@
     </div>
 </div>
 
-<script>
-    $('#cart').click(function(){
-        // Get CSRF token
-        var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-    
-        $.ajax({
-            type: 'POST',  // Change request type to POST
-            url: '/products/Add_cart',
-            data: {
-                csrfmiddlewaretoken: csrftoken,  // Include CSRF token in data
-                id: "{{ Product.PID }}",
-                tid: "{{ type.pk }}"
-            },
-            success: function(response) {
-                $('#message').css({"display": "block"});
-                $('#cart_no').html(response.cart_no);
-            },
-            error: function(response) {
-                $('#message1').css({"display": "block"});
-            }
-        });
-    });
-</script>
+
 {% endblock main-content %}
 
 

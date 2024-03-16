@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse,HttpResponseNotFound
+from django.http import JsonResponse,HttpResponseNotFound,HttpResponse
 from .models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
 from User_Account.models import Cart
 from django.contrib import messages
@@ -42,10 +42,8 @@ def product_detail(request,tid,pid):
         return HttpResponseNotFound("Product not found.")
 
 @login_required
-def add_to_cart(request):
-    try:
-        pid = request.POST.get("id")
-        tid = request.POST.get("tid")
+def add_view(request,tid,pid):
+    
         if Cart.objects.filter(PID=pid ,user=request.user).exists():
             cart_obj=Cart.objects.get(PID=pid,user=request.user)
             cart_obj.Quantity=cart_obj.Quantity+1
@@ -60,7 +58,5 @@ def add_to_cart(request):
             cart.save()
 
         c=Cart.objects.filter(user=request.user).aggregate(cart_no=Sum('Quantity'))
-        return JsonResponse({'cart_no': c['cart_no']})
+        return HttpResponse({c['cart_no']})
     
-    except:
-        return HttpResponseNotFound("Login First")
