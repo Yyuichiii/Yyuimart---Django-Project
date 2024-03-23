@@ -1,35 +1,42 @@
-{% extends 'User_Account/base.html' %} {% load static %} {% block title %}Login{% endblock title %} {% block main-content %}
+{% extends 'User_Account/base.html' %} 
+{% load static %} 
+{% block title %}Login{% endblock title %} 
+{% block main-content %}
+
 <div class="container">
-  <div class="row my-3">
-    <div class="col-sm-6 offset-sm-3">
-      <h3>Login</h3>
-      <hr />
-      <form action="{% url "login" %}" method="POST" novalidate class="shadow p-5">
-        {% csrf_token %} 
-        {% for field in form %}
-        <div class="mb-3">
-          <label class="form-label">{{ field.label }}</label> {{ field }}
-          <p class="error">{{ field.errors|striptags }}</p>
-        </div>
-        {% endfor %}
-        
-        {% if form.non_field_errors %} 
-        {% for error in form.non_field_errors %}
-        <p class="alert alert-danger my-3">{{error}}</p>
-        {% endfor %} {% endif %}
-        <div class="text-center">
-        <input type="submit" class="btn btn-primary mt-4" value="Login" /></div>
-        <br />
-        <div class="text-center text-primary fw-bold">
-          <small
-            >New to Yyuimart ?
-            <a href="{%url 'registration'%}" class="text-danger"
-              >Create an Account</a
-            >
-          </small>
-        </div>
-    </div>
-</form>
+  <div class="row my-3 justify-content-center">
+      <div class="col-sm-5">
+          <div class="card shadow">
+              <div class="card-body">
+                  <h3 class="card-title text-center mb-4">Login</h3>
+                  <hr>
+                  <form action="{% url 'login' %}" method="POST" novalidate class="p-5">
+                      {% csrf_token %} 
+                      {% for field in form %}
+                      <div class="mb-3">
+                          <label class="form-label">{{ field.label }}</label>
+                          {{ field }}
+                          <p class="text-danger">{{ field.errors|striptags }}</p>
+                      </div>
+                      {% endfor %}
+                      {% if form.non_field_errors %} 
+                      {% for error in form.non_field_errors %}
+                      <p class="alert alert-danger my-3">{{error}}</p>
+                      {% endfor %} 
+                      {% endif %}
+                      <div class="text-center mt-4">
+                          <input type="submit" class="btn btn-primary" value="Login">
+                      </div>
+                  </form>
+                  <div class="text-center mt-3">
+                      <p class="text-primary fw-bold">New to Yyuimart ? <a href="{%url 'registration'%}" class="text-danger">Create an Account</a></p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
   
 {% endblock main-content %} 
 

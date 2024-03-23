@@ -49,7 +49,9 @@
             </div>
             {% else %}
             <div class="button-container">
-                <button id="cart" class="btn btn-primary shadow px-5 py-2" disabled
+                <button id="cart" class="btn btn-warning shadow px-5 py-2"
+                hx-post="{% url 'AddCart' type.pk Product.PID %}"
+                
                 >Add to Cart</button>
         
             </div>

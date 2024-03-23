@@ -1,0 +1,39 @@
+ <!--Notifications-->
+ {% load static %}
+
+ <section id="msg_notification" hx-swap-oob="true">
+    <div class="custom-toasts">
+        <!-- Display Django messages as toast notifications -->
+        {% for message in messages %}
+            <div class="custom-toast-notification {% if message.tags %}custom-toast-{{ message.tags }}{% endif %} slide-in-slide-out">
+                <div class="custom-toast-content">
+                    <div class="custom-toast-icon">
+                        {% if message.tags == 'success' %}
+                        <i class="fa fa-check"></i>
+                        {% else %}
+                        <img width="34" height="34" 
+                        src="{% static 'User_Account/images/close.png' %}">
+                        {% endif %}
+                        
+                    </div>
+                    <div class="custom-toast-msg">{{ message }}</div>
+                </div>
+                <div class="custom-toast-progress">
+                    <div class="custom-toast-progress-bar"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="custom-master-toast-notification custom-hide-toast">
+        <div class="custom-toast-content">
+            <div class="custom-toast-icon">
+                
+            </div>
+            <div class="custom-toast-msg"></div>
+        </div>
+        <div class="custom-toast-progress">
+            <div class="custom-toast-progress-bar"></div>
+        </div>
+    </div>
+
+ </section>

@@ -1,12 +1,11 @@
 from django.shortcuts import render
-from django.http import JsonResponse,HttpResponseNotFound,HttpResponse
+from django.http import HttpResponseNotFound,HttpResponse
 from .models import Mobile,Laptop,HeadPhone,Men,Women,Shoe
 from User_Account.models import Cart
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum
-from django.contrib.auth.decorators import login_required
+
 
 
 def category(request, c):
@@ -41,22 +40,26 @@ def product_detail(request,tid,pid):
     except:
         return HttpResponseNotFound("Product not found.")
 
-@login_required
-def add_view(request,tid,pid):
-    
-        if Cart.objects.filter(PID=pid ,user=request.user).exists():
-            cart_obj=Cart.objects.get(PID=pid,user=request.user)
-            cart_obj.Quantity=cart_obj.Quantity+1
-            cart_obj.save()
-        else:
-            content_type=ContentType.objects.get_for_id(tid)
-            cart=Cart.objects.create(
-                user=request.user,
-                content_type=content_type,
-                PID=pid,
-            )
-            cart.save()
 
-        c=Cart.objects.filter(user=request.user).aggregate(cart_no=Sum('Quantity'))
-        return HttpResponse({c['cart_no']})
+def add_view(request,tid,pid):
+    if not request.user.is_authenticated:
+        return HttpResponse("Login Required !!")
     
+    type=ContentType.objects.get_for_id(tid)
+    if Cart.objects.filter(PID=pid ,user=request.user).exists():
+        cart_obj=Cart.objects.get(PID=pid,user=request.user)
+        cart_obj.Quantity=cart_obj.Quantity+1
+        cart_obj.save()
+    else:
+        
+        cart=Cart.objects.create(
+            user=request.user,
+            content_type=type,
+            PID=pid,
+        )
+        cart.save()
+    c=Cart.objects.filter(user=request.user).aggregate(cart_no=Sum('Quantity'))
+    product=type.get_object_for_this_type(PID=pid)
+    
+    messages.success(request,f"{product} has been added to the cart")
+    return render(request,"Product/partial/cart_update.html",{'cart':c['cart_no']})

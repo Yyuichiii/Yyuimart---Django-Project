@@ -1,0 +1,72 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">Yyuimart</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="electronicsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Electronics
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
+                        <li><a class="dropdown-item" href="{% url 'Category' 'Mobile' %}">Mobile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Category' 'Laptop' %}">Laptop</a></li>            
+                        <li><a class="dropdown-item" href="{% url 'Category' 'HeadPhone' %}">HeadPhone</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="fashionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Fashion
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="fashionDropdown">
+                        <li><a class="dropdown-item" href="{% url 'Category' 'Men' %}">Mens Wears</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Category' 'Women' %}">Women Wears</a></li>
+                        <li><a class="dropdown-item" href="{% url 'Category' 'Shoe' %}">Shoes / Footwears</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="d-flex" >
+                <input id="search_input" name="search_input" class="form-control me-2" type="search" placeholder="Search for products" aria-label="Search">
+
+                <button class="btn btn-warning" type="submit">Search</button>
+            </form>
+            <div>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown mx-2">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ user.name }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'orders' %}">Orders</a></li>
+                            <li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                    
+                        <li class="nav-item mx-2">
+                            <a href="{% url 'cart' %}" class="nav-link"><span id="cart_no" class="badge bg-danger">{{ cart_no }}</span> Cart </a>
+                        </li>
+                        
+
+                    
+                    {% endif %}
+                    {% if not request.user.is_authenticated %}
+                    <li class="nav-item mx-2">
+                        <a href="{% url 'login' %}" class="nav-link">Login</a>
+                    </li>
+                    <li class="nav-item mx-2">
+                        <a href="{% url 'registration' %}" class="nav-link">Registration</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

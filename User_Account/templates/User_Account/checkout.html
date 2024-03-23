@@ -1,6 +1,7 @@
 {% extends 'User_Account/base.html' %}
 {% load static %}
 {% load mathfilters %}
+{% load customfilters %}
 {% block title %}Buy Now{% endblock title %}
 {% block main-content %}
 <div class="container">
@@ -12,7 +13,7 @@
         <div class="card-body">
           {% for p in product %}
           <h5>{{p.content_object.Brand}} {{p.content_object.PName}} (x{{p.Quantity}})</p>
-          <p class="fw-bold">Price : Rs. {{p.content_object.Price |mul:p.Quantity}}/-</p>
+          <p class="fw-bold">Price : Rs. {{p.content_object.Price |mul:p.Quantity|floatcomma_indian}}/-</p>
           {% endfor %}
           
           
@@ -36,13 +37,13 @@
         </div>
       </div>
         <div class="form-check mt-2 mb-5">
-          <a href="{% url "edit_address" %}" class="btn btn-primary mt-3 px-3 fw-bold"  rel="noopener noreferrer">ADD / EDIT</a>
+          <a href="{% url 'edit_address' %}" class="btn btn-primary mt-3 px-3 fw-bold"  rel="noopener noreferrer">ADD / EDIT</a>
             
         </div>
         <div class="text-end">
-          <h2>Rs. {{tp}}/-</h2>
+          <h2>Rs. {{tp|floatcomma_indian}}/-</h2>
           {% if Address %}
-          <a href="{% url "success" %}" class="btn btn-warning mt-3 px-5 fw-bold">Continue</a>
+          <a href="{% url 'success' %}" class="btn btn-warning mt-3 px-5 fw-bold">Continue</a>
           {% else %}
           <button type="submit"  class="btn btn-warning mt-3 px-5 fw-bold" disabled>Continue</button>
           {% endif %}

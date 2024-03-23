@@ -1,50 +1,47 @@
 {% extends 'User_Account/base.html' %}
 {% load static %}
-{% block title %}Profile{% endblock title %}
+{% block title %}Address{% endblock title %}
 {% block main-content %}
+
 <div class="container my-5">
- <div class="row">
-  <h3>Welcome {{user.name}}</h3>
-  <div class="col-sm-2 border-end">
-   <ul class="list-unstyled">
-    <li class="d-grid"><a href="{% url 'profile' %}" class="btn">Profile</a></li>
-    <li class="d-grid"><a href="{% url 'address' %}" class="btn btn-primary">Address</a></li>
-   </ul>
+  <div class="row">
+      <h3>Welcome {{ user.name }}</h3>
+      <div class="col-sm-2 border-end">
+          <ul class="list-unstyled">
+              <li class="d-grid"><a href="{% url 'profile' %}" class="btn btn" >Profile</a></li>
+              <li class="d-grid"><a href="{% url 'address' %}" class="btn btn-primary">Address</a></li>
+          </ul>
+      </div>
+      <div class="col-sm-8 offset-sm-1">
+          <form action="" method="POST" novalidate class="p-5 shadow">
+              {% csrf_token %}
+              {% for field in form %}
+              <div class="col-12 mt-3">
+                  <label class="form-label">{{ field.label }}</label> {{ field }}
+                  <p class="error">{{ field.errors|striptags }}</p>
+              </div>
+              {% endfor %}
+              {% if form.non_field_errors %}
+              {% for error in form.non_field_errors %}
+              <p class="alert alert-danger my-3">{{ error }}</p>
+              {% endfor %}
+              {% endif %}
+              <div class="col-12 mt-3">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+          </form>
+      </div>
   </div>
-  <div class="col-sm-8 offset-sm-1">
-
-    <form action="" method="POST" novalidate class="p-5 shadow">
-      {% csrf_token %}
-    
-    {% for field in form %}
-        <div class="col-12 mt-3">
-          <label class="form-label">{{ field.label }}</label> {{ field }}
-          <p class="error">{{ field.errors|striptags }}</p>
-        </div>
-        {% endfor %}
-
-        {% if form.non_field_errors %} 
-        {% for error in form.non_field_errors %}
-        <p class="alert alert-danger my-3">{{error}}</p>
-        {% endfor %} {% endif %}
-    <div class="col-12 mt-3">
-      <button id="address_btn" type="submit" class="btn btn-primary">Submit</button>
-    </div>
-   </form>
-    
+</div>
 <script>
+  const refreshBtn = document.querySelector("#address_btn");
 
-const refreshBtn = document.getElementById("address_btn");
+  function handleClick(event) {
+      event.preventDefault();
+      window.location.href = "http://127.0.0.1:8000/cart/checkout/";
+  }
 
-function handleClick() {
-  var c='http://127.0.0.1:8000/cart/checkout/';
-  c.reload();
-  console.log(window.location);
-  
-}
-
-refreshBtn.addEventListener("click", handleClick);
-
+  refreshBtn.addEventListener("click", handleClick);
 </script>
 
 {% endblock main-content %}

@@ -55,62 +55,6 @@
     color: black;
 }
 
-/* 
-
-
-/* Custom CSS */
-
-/* body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-}
-
-.navbar-brand,
-.navbar-nav .nav-link.active,
-.navbar-nav .nav-item .nav-link {
-    font-weight: bold;
-}
-
-.navbar-nav .nav-link { */
-    /* color: #920f0f; */
-/* } */
-
-/* .dropdown-menu .dropdown-item,
-.navbar-nav .nav-link.dropdown-toggle {
-    font-size: 16px;
-    /* font-weight: bold; */
-/* } */ 
-
-/* .form-control {
-    border-radius: 4px;
-}
-
-.btn-warning {
-    border-radius: 20px;
-    background-color: #ffc107;
-    border: none;
-    color: #000;
-}
-
-.footer {
-    background-color: #343a40;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.footer img {
-    width: 120px;
-}
-
-
- */
-
-
-
-
-/* sdsfdkjls */
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -146,14 +90,179 @@ body {
     color: #000;
 }
 
-.footer {
-    background-color: #343a40;
+/* notification css */
+
+.custom-toasts {
+    position: fixed;
+    top: 3rem;
+    right: 1rem;
+    z-index: 9999;
+}
+
+.custom-toast-notification {
+    width: 350px;
+    margin-bottom: .75rem;
+    background: #f8f8ff;
+    border-radius: 2px;
+    box-shadow: 1px 7px 14px -5px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    animation: customFadeOutAndHide 3s ease-in-out forwards;
+    /* Apply hiding animation */
+
+}
+
+@keyframes customFadeOutAndHide {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        visibility: hidden;
+
+        display: none;
+    }
+}
+
+.custom-toast-notification .custom-toast-content {
+    font-weight: 800;
+    color: #353b48;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0 1rem;
+}
+
+
+
+.custom-toast-notification .custom-toast-icon {
+    background-color: #27ae60;
+
     color: #fff;
-    padding: 20px 0;
-    text-align: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
 }
 
-.footer img {
-    width: 120px;
+.custom-toast-notification .custom-toast-icon i {
+    font-size: 1.25rem;
 }
 
+.custom-toast-notification .custom-toast-progress {
+    height: 2px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+
+.custom-toast-notification .custom-toast-progress-bar {
+    background-color: #b7b7b7;
+    height: 2px;
+    animation: customToastProgress 3s ease-in-out forwards;
+}
+
+.custom-slide-in-slide-out {
+    animation: customSlideInRight 0.3s ease-in-out forwards, customSlideOutRight 0.5s ease-in-out forwards 3s;
+    transform: translateX(110%);
+}
+
+.custom-slide-in-fade-out {
+    animation: customSlideInRight 0.3s ease-in-out forwards, customFadeOut 0.5s ease-in-out forwards 3s;
+    transform: translateX(110%);
+}
+
+.custom-wiggle-me {
+    animation: customWiggle 2s ease-in;
+}
+
+@keyframes customSlideInRight {
+    0% {
+        transform: translateX(110%);
+    }
+
+    75% {
+        transform: translateX(-10%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes customSlideOutRight {
+    0% {
+        transform: translateX(0%);
+    }
+
+    25% {
+        transform: translateX(-10%);
+    }
+
+    100% {
+        transform: translateX(110%);
+    }
+}
+
+@keyframes customFadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes customToastProgress {
+    0% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0%;
+    }
+}
+
+@keyframes customWiggle {
+
+    0%,
+    7% {
+        transform: rotateZ(0);
+    }
+
+    15% {
+        transform: rotateZ(-13deg);
+    }
+
+    20% {
+        transform: rotateZ(9deg);
+    }
+
+    25% {
+        transform: rotateZ(-10deg);
+    }
+
+    30% {
+        transform: rotateZ(7deg);
+    }
+
+    35% {
+        transform: rotateZ(-2deg);
+    }
+
+    40%,
+    100% {
+        transform: rotateZ(0);
+    }
+}
+
+.custom-toast-error .custom-toast-icon {
+    background-color: red;
+    color: black;
+}
+
+/* Notification css ends */

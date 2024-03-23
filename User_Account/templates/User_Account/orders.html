@@ -24,7 +24,7 @@
                             <p class="mb-1"><strong>Mobile:</strong> {{ order.Address.Phone }}</p>
                             <p class="mb-1"><strong>Quantity:</strong> {{ order.Quantity }}</p>
                             <p class="mb-1"><strong>Address:</strong> {{ order.Address.house_no }} {{ order.Address.Road_name }}</p>
-                            <p class="mb-1"><strong>Price:</strong> Rs. {{ order.Price|num_format }}</p>
+                            <p class="mb-1"><strong>Price:</strong> Rs. {{ order.Price|floatcomma_indian }}</p>
                         </div>
                     </div>
                 </div>
