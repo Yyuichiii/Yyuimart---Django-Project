@@ -225,11 +225,6 @@ def delete(request,i):
 def add(request,i):
     obj=Cart.objects.get(pk=i)
     obj.Quantity=obj.Quantity+1
-
-    # price=obj.Price/obj.Quantity
-    
-    # obj.Quantity=update
-    # obj.Price=price*update
     obj.save()
     
     messages.success(request,"The Quantity of the selected Item has been added successfully")
@@ -310,10 +305,6 @@ def success(request):
     order_recieved(order,request.user,total_price)
     messages.success(request, "Order has been Successfully Received ")
     return redirect("home")
-    # except:
-        # messages.error(request,"Something wrong Happened ")
-        # return redirect("cart")
-
 
 
 # Orders Section
